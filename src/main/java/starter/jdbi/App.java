@@ -25,12 +25,9 @@ public class App extends Jooby {
     
     assets("/coba_input", "coba_input.html");
     assets("/index", "index.html");
-    assets("/chart", "chart.html");
-    assets("/panel", "tab-panel.html");
-    assets("/empty", "empty.html");
-    assets("/form", "form.html");
-    assets("/table", "table.html");
-    assets("/ui_elements", "ui-elements.html");
+    assets("/user", "user-table.html");
+    assets("/predict", "prediction.html");
+    assets("/maps", "movement-maps.html");
     assets("/login", "login.html");    
     }
 
