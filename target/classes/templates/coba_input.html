@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Input</title>
+    <meta charset="UTF-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+</head>
+<body>
+<h1>Welcome</h1>
+	
+	<div id="map"></div>
+
+	<div>
+			<label>lon</label><br>
+			<input type="text" id="lon"><br>
+			<br>
+			<label>lat</label><br>
+			<input type="text" id="lat"><br>
+			<br>
+			<label>geom</label><br>
+			<input type="text" id="geom"><br>
+			<br>
+			<label>date</label><br>
+			<input type="date" id="date"><br>
+			<br>
+			<button onclick="submit()">submit</button>
+
+
+
+	</div>
+
+<script >
+
+	var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -7.2790816, lng: 112.7949074},
+          zoom: 12
+        });
+
+         map.addListener('click', function(event) {
+          //map.setZoom(8);
+          //map.setCenter(marker.getPosition());
+          //console.log(event.latLng.lat());
+          //console.log(event.latLng.lng());
+           let lat = event.latLng.lat();
+           let lng = event.latLng.lng();
+           let latLng = "POINT(" + lng + " " + lat + ")";
+
+           document.getElementById("geom").value = latLng;
+       	
+       		console.log(latLng);
+
+        });
+
+      }
+
+
+	function submit() {
+
+		let lon = document.getElementById("lon").value;
+		let lat = document.getElementById("lat").value;
+		let geom = document.getElementById("geom").value;
+		let date = document.getElementById("date").value;
+		let data = {
+			lon: lon,
+			lat: lat,
+			geom: geom,
+			date: date,
+		};
+			
+			kirimAPI(data);
+
+	}
+
+	function kirimAPI(data) {
+		console.log(data);
+
+		let xhr = new XMLHttpRequest();
+
+		xhr.onreadystatechange = function() {
+			if(this.readyState == 4 && this.status == 200){
+
+				console.log("OK");
+			}
+		};
+
+		xhr.open("POST","/api/history", true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(data));
+	}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaHv8DyZ-jmk85sVwxh6QKs1DenHuunTs&callback=initMap"
+    async defer></script>
+
+</body>
+
+
+
+</html>

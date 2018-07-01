@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pengaturan | CrimeGIS</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/assets/css/w3.css">
+		<link rel="stylesheet" href="/assets/css/style.css">
+		<link rel="stylesheet" href="/assets/css/w3-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	
+	<body class="color-base">
+
+		<!-- Navbar -->
+		<div class="w3-top">
+			<div class="w3-bar color-accent w3-left-align">
+				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-hover-white w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+				<a href="/sudo" class="w3-bar-item w3-button font-great-lakes w3-theme-d2 w3-hover-theme-d2">CrimeGIS</a>
+				<a href="#" class="w3-bar-item w3-button font-great-lakes w3-theme-d1 w3-hover-theme-d1"><i class="fa fa-caret-right"></i></a>
+				<a href="#" class="w3-bar-item w3-button w3-theme w3-hover-theme">Pengaturan</a>
+				
+				<div class="w3-dropdown-click w3-hide-small w3-right">
+					<button class="w3-button w3-hover-theme" title="Menu" onclick="myFunction()">
+						<i class="fa fa-user-circle-o"></i>
+					</button>     
+					
+					<div id="menu-dropdown" class="w3-dropdown-content w3-card-4 w3-bar-block w3-animate-opacity" style="right:0">
+						<div class="w3-bar-item">
+							<span class="bold">{{ session.nama }}</span> <br>
+							<span class="w3-small">Super Administrator</span>
+						</div>
+						<a href="/sudo/pengaturan" class="w3-bar-item w3-button w3-hover-theme">Pengaturan</a>
+						<a href="/sudo/logout" class="w3-bar-item w3-button w3-hover-theme">Logout</a>
+					</div>
+				</div>
+				
+				<a href="#team" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi User</a>
+				<a href="#work" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi Lokasi</a>
+			</div>
+
+			<!-- Navbar on small screens -->
+			<div id="menu-small" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
+				<a href="#" class="w3-bar-item w3-button">Pengaturan</a>
+				<a href="#" class="w3-bar-item w3-button">Logout</a>
+			</div>
+		</div>
+
+		<!-- Settings Container -->
+		<div class="w3-container w3-padding-64 w3-theme-light" id="pengaturan">
+			<div class="w3-row w3-padding-48 w3-container">
+				<div class="w3-col m4 w3-center color-accent-text">
+					<i class="fa fa-gear" style="font-size:20em"></i>
+					<h3>Pengaturan</h3>
+				</div>
+				
+				<div class="w3-col m8">
+					<div class="w3-green w3-margin-bottom w3-padding-large w3-round cursor-pointer" onclick="hide(this)">
+						Berhasil menyimpan data
+					</div>
+					
+					<form class="w3-container w3-card-4 w3-padding-16 w3-white w3-round" action="/action_page.php" target="_blank">
+						<div class="w3-section">      
+							<label>Nama</label>
+							<input class="w3-input" type="text" name="Name" required>
+						</div>
+
+						<div class="w3-section">      
+							<label>Password</label>
+							<input class="w3-input" type="text" name="Email" required>
+						</div>
+						
+						<button type="submit" class="w3-button w3-right w3-theme w3-round">Simpan</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 color-base w3-center">
+			<p>2018 &copy; <b>CrimeGIS</b></p>
+			<p class="w3-small">Template oleh <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+		</footer>
+
+		<script>
+			// Script for side navigation
+			function w3_open() {
+				var x = document.getElementById("mySidebar");
+				x.style.width = "300px";
+				x.style.paddingTop = "10%";
+				x.style.display = "block";
+			}
+
+			// Close side navigation
+			function w3_close() {
+				document.getElementById("mySidebar").style.display = "none";
+			}
+
+			// Used to toggle the menu on smaller screens when clicking on the menu button
+			function openNav() {
+				var x = document.getElementById("menu-small");
+				
+				if (x.className.indexOf("w3-show") == -1) {
+					x.className += " w3-show";
+				} else { 
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			function myFunction() {
+				var x = document.getElementById("menu-dropdown");
+				if (x.className.indexOf("w3-show") == -1) { 
+					x.className += " w3-show";
+				} else {
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			function hide(element) {
+				element.style.display = "none";
+			}
+		</script>
+
+	</body>
+</html>

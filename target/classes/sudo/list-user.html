@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Administrasi User | CrimeGIS</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/assets/css/w3.css">
+		<link rel="stylesheet" href="/assets/css/style.css">
+		<link rel="stylesheet" href="/assets/css/w3-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<script src="/assets/js/w3.js"></script>
+	</head>
+	
+	<body class="color-base">
+
+		<!-- Navbar -->
+		<div class="w3-top">
+			<div class="w3-bar color-accent w3-left-align">
+				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-hover-white w3-theme-d2" href="javascript:void(0);" onclick="showNav()"><i class="fa fa-bars"></i></a>
+				<a href="/sudo" class="w3-bar-item w3-button font-great-lakes w3-theme-d2 w3-hover-theme-d2">CrimeGIS</a>
+				<a href="#" class="w3-bar-item w3-button font-great-lakes w3-theme-d1 w3-hover-theme-d1"><i class="fa fa-caret-right"></i></a>
+				<a href="#" class="w3-bar-item w3-button w3-theme w3-hover-theme">Administrasi User</a>
+				
+				<div class="w3-dropdown-click w3-hide-small w3-right">
+					<button class="w3-button w3-hover-theme" title="Menu" onclick="showMenu()">
+						<i class="fa fa-user-circle-o"></i>
+					</button>     
+					
+					<div id="menu-dropdown" class="w3-dropdown-content w3-card-4 w3-bar-block w3-animate-opacity" style="right:0">
+						<div class="w3-bar-item">
+							<span class="bold">{{ session.nama }}</span> <br>
+							<span class="w3-small">Super Administrator</span>
+						</div>
+						<a href="/sudo/pengaturan" class="w3-bar-item w3-button w3-hover-theme">Pengaturan</a>
+						<a href="/sudo/logout" class="w3-bar-item w3-button w3-hover-theme">Logout</a>
+					</div>
+				</div>
+				
+				<a href="/sudo/user" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi User</a>
+				<a href="/sudo/lokasi" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi Lokasi</a>
+			</div>
+
+			<!-- Navbar on small screens -->
+			<div id="menu-small" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
+				<a href="/sudo/pengaturan" class="w3-bar-item w3-button">Pengaturan</a>
+				<a href="/sudo/logout" class="w3-bar-item w3-button">Logout</a>
+			</div>
+		</div>
+
+		<!-- Title dan top pagination -->
+		<div class="w3-row-padding w3-padding-16" id="container-top" style="margin-top: 64px">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest">
+				<div class="w3-quarter">
+					<h1 class="w3-xlarge">Daftar User</h1>
+				</div>
+				
+				<div class="w3-rest w3-theme w3-right w3-round">
+					<button class="w3-button w3-hover-theme" onclick="prev()">
+						<i class="fa fa-caret-left"></i>
+					</button>
+					
+					<button class="w3-button color-base color-base-hover w3-border" onclick="showBlock('modal-pagination')">
+						<span id="hal-aktif-atas"></span> dari <span id="max-hal-atas"></span>
+					</button>
+					
+					<button class="w3-button w3-hover-theme" onclick="next()">
+						<i class="fa fa-caret-right"></i>
+					</button>
+				</div>
+			</div>
+
+		</div>
+		<!-- Title dan top pagination end -->
+		
+		<!-- Notifikasi -->
+		<div id="notif-simpan" class="w3-row-padding w3-animate-opacity" style="display: none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-green w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>Data berhasil disimpan.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="notif-hapus" class="w3-row-padding w3-animate-opacity" style="display: none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-red w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>Data berhasil dihapus.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="notif-gagal" class="w3-row-padding w3-animate-opacity" style="display: none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-red w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>NRP sudah digunakan.</p>
+				</div>
+			</div>
+		</div>
+		<!-- Notifikasi end -->
+		
+		<!-- Tabel data -->
+		<div class="w3-row-padding w3-margin-bottom" id="container-tabel-data">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-responsive w3-round w3-theme" id="data-table-container" style="display:none">
+				<table class="w3-table w3-bordered w3-border w3-striped w3-hoverable" id="data-table">
+					<thead>
+						<tr>
+							<th style="width:10%">No</th>
+							<th style="width:50%">Nama</th>
+							<th style="width:30%">NRP</th>
+							<th style="width:10%">Opsi</th>
+						</tr>
+					</thead>
+					
+					<tbody class="color-base" id="data-list"></tbody>
+					
+					<tfoot>
+						<tr>
+							<td colspan="4"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			<div class="w3-rest w3-round w3-theme-light w3-card w3-padding-large w3-leftbar w3-border-theme" id="data-empty-container" style="display:none">
+				<p>Belum ada data. Klik <a href="#" onclick="showBlock('modal-tambah-user')">di sini</a> untuk menambahkan data baru.</p>
+			</div>
+
+		</div>
+		
+		<br>
+		
+		<!-- Bottom pagination -->
+		<div class="w3-row-padding" id="bottom-pagination">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest">
+				<div class="w3-col l5">
+					&nbsp;
+				</div>
+				
+				<div class="w3-col l5 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="w3-rest w3-theme w3-round w3-center">
+					<button class="w3-button w3-hover-theme" onclick="prev()">
+						<i class="fa fa-caret-left"></i>
+					</button>
+					
+					<button class="w3-button color-base color-base-hover w3-border" onclick="showBlock('modal-pagination')">
+						<span id="hal-aktif-bawah"></span> dari <span id="max-hal-bawah"></span>
+					</button>
+					
+					<button class="w3-button w3-hover-theme" onclick="next()">
+						<i class="fa fa-caret-right"></i>
+					</button>
+				</div>
+			</div>
+
+		</div>
+		
+		<!-- Button plus -->
+		<button type="button" class="w3-button w3-circle w3-theme-d1 w3-card w3-hover-theme w3-xlarge" style="position:fixed;bottom:30px;right:30px" onclick="showBlock('modal-tambah-user')">
+			<i class="fa fa-plus"></i>
+		</button>
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 color-base w3-center">
+			<p>2018 &copy; <b>CrimeGIS</b></p>
+			<p class="w3-small">Template oleh <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+		</footer>
+
+		<!-- Modals -->
+		<div id="modal-pagination" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-pagination')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Buka halaman (maks. <span id="max-hal-modal"></span>)
+						</div>
+					</header>
+					
+					<!-- Input form -->
+					
+					<div id="input-administrator-baru" class="w3-white w3-container w3-padding-large w3-row">
+						<button class="w3-col l2 w3-green w3-button w3-right w3-round w3-hover-green" onclick="tujuHalaman()">Buka</button>
+						
+						<input id="halaman-tujuan" type="text" class="w3-input w3-white w3-col l9">
+					</div>
+					
+					<!-- Input Form End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-tambah-user" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-tambah-user')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Tambah Administrator Baru
+						</div>
+					</header>
+					
+					<!-- Input form -->
+					
+					<div id="input-administrator-baru" class="w3-white w3-container w3-padding-large">
+						<label for="nama-admin-baru" class="w3-label w3-margin-top">Nama</label>
+						<input id="nama-admin-baru" type="text" class="w3-input w3-white"><br>
+						
+						<label for="nama-admin-baru" class="w3-label">NRP</label>
+						<input id="nrp-admin-baru" type="text" class="w3-input w3-white"><br>
+						
+						<div class="w3-row">
+							<button id="tombol-admin-baru" class="w3-green w3-button w3-right w3-round w3-hover-green" onclick="tambahkanUser()">Simpan</button>
+							<i class="fa fa-refresh w3-spin w3-right w3-padding" style="font-size:18px;display:none" id="loading-simpan-baru"></i>
+						</div>
+					</div>
+					
+					<!-- Input Form End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-edit-user" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-edit-user')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Edit Administrator
+						</div>
+					</header>
+					
+					<!-- Input form -->
+					
+					<div id="input-administrator-lama" class="w3-white w3-container w3-padding-large">
+						<label for="nama-admin-lama" class="w3-label w3-margin-top">Nama</label>
+						<input id="nama-admin-lama" type="text" class="w3-input w3-white"><br>
+						
+						<label for="nama-admin-lama" class="w3-label">NRP</label>
+						<input id="nrp-admin-lama" type="text" class="w3-input w3-white"><br>
+						
+						<div class="w3-row">
+							<button id="tombol-admin-lama" class="w3-green w3-button w3-right w3-round w3-hover-green" onclick="editUser()">Simpan</button>
+							<i class="fa fa-refresh w3-spin w3-right w3-padding" style="font-size:18px;display:none" id="loading-simpan-lama"></i>
+						</div>
+					</div>
+					
+					<!-- Input Form End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-hapus-user" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-red w3-col l8 w3-round w3-card-4">
+					<!-- Input form -->
+					
+					<div id="info-hapus-user" class="w3-white w3-container w3-padding-large w3-round">
+						<p class="bold">Hapus <span id="nama-hapus-user"></span>?</p>
+						
+						<p>User yang sudah dihapus tidak bisa dikembalikan lagi dan seluruh data yang di-input-kan olehnya akan terhapus secara otomatis.</p>
+						
+						<button class="w3-red w3-button w3-right w3-round w3-hover-red" onclick="deleteUser()">Hapus</button>
+						<button class="color-base w3-button w3-right w3-round color-base-hover w3-margin-right" onclick="hide('modal-hapus-user')">Batal</button><br><br>
+					</div>
+					
+					<!-- Input Form End -->
+				</div>
+			</div>
+		</div>
+		<!-- Modals end -->
+
+		<script>
+			//~ Deklarasi variabel
+			let halamanMaks = 0;
+			let halaman = 1;
+			let idToEdit = 0;
+			let idToDelete = 0;
+			let inputNamaBaru = document.getElementById('nama-admin-baru');
+			let inputNRPBaru = document.getElementById('nrp-admin-baru');
+			let inputNamaLama = document.getElementById('nama-admin-lama');
+			let inputNRPLama = document.getElementById('nrp-admin-lama');
+			let tombolTambahBaru = document.getElementById('tombol-admin-baru');
+			let tombolTambahLama = document.getElementById('tombol-admin-lama');
+			
+			//~ API POST
+			function postUser(data) {
+				var xhr = new XMLHttpRequest();
+
+				xhr.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if(JSON.parse(this.responseText)) {
+							hide('loading-simpan-baru');
+							hide('modal-tambah-user');
+							inputNRPBaru.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							inputNamaBaru.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							tombolTambahBaru.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+							tombolTambahBaru.classList.add("w3-green","w3-hover-green");
+							showBlock('notif-simpan');
+							
+							inputNRPBaru.value = "";
+							inputNamaBaru.value = "";
+							bukaHalaman(halaman);
+							getMaksHalaman();
+						} else {
+							hide('loading-simpan-baru');
+							hide('modal-tambah-user');
+							inputNRPBaru.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							inputNamaBaru.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							tombolTambahBaru.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+							tombolTambahBaru.classList.add("w3-green","w3-hover-green");
+							showBlock('notif-gagal');
+							
+							inputNRPBaru.value = "";
+							inputNamaBaru.value = "";
+						}
+					}
+				};
+
+				xhr.open("POST", "/api/user-account", true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.send(JSON.stringify(data));
+			}
+			
+			//~ API GET
+			function getUserList(halaman=1) {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						fillUserList(JSON.parse(this.responseText));
+					}
+				};
+
+				xhttp.open("GET", "/api/user-account?halaman=" + halaman, true);
+				xhttp.send();
+			}
+			
+			function getUser(id, tujuan) {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if(tujuan == "edit") {
+							fillUserEdit(JSON.parse(this.responseText));
+						} else if(tujuan == "hapus") {
+							fillUserHapus(JSON.parse(this.responseText));
+						}
+					}
+				};
+
+				xhttp.open("GET", "/api/user-account/" + id, true);
+				xhttp.send();
+			}
+			
+			function getMaksHalaman() {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						halamanMaks = JSON.parse(this.responseText);
+						
+						document.getElementById("max-hal-atas").innerHTML = halamanMaks;
+						document.getElementById("max-hal-bawah").innerHTML = halamanMaks;
+						document.getElementById("max-hal-modal").innerHTML = halamanMaks;
+						
+						if(halaman > halamanMaks) {
+							halaman = halamanMaks;
+							
+							bukaHalaman(halaman);
+						} else {
+							bukaHalaman(halaman);
+						}
+					}
+				};
+
+				xhttp.open("GET", "/api/max-hal/user", true);
+				xhttp.send();
+			}
+			
+			//~ API PUT
+			function putUser(data) {
+				let xhr = new XMLHttpRequest();
+			
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						if(JSON.parse(this.responseText)) {
+							hide('loading-simpan-lama');
+							hide('modal-edit-user');
+							inputNRPLama.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							inputNamaLama.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							tombolTambahLama.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+							tombolTambahLama.classList.add("w3-green","w3-hover-green");
+							showBlock('notif-simpan');
+							
+							inputNRPLama.value = "";
+							inputNamaLama.value = "";
+							bukaHalaman(halaman);
+						} else {
+							hide('loading-simpan-lama');
+							hide('modal-edit-user');
+							inputNRPLama.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							inputNamaLama.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+							tombolTambahLama.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+							tombolTambahLama.classList.add("w3-green","w3-hover-green");
+							showBlock('notif-gagal');
+							
+							inputNRPLama.value = "";
+							inputNamaLama.value = "";
+						}
+					}
+				};
+				
+				xhr.open('PUT', '/api/user-account', true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.send(JSON.stringify(data));
+			}
+			
+			//~ API DELETE
+			function deleteUser() {
+				let xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if(JSON.parse(this.responseText)) {
+							getMaksHalaman();
+							
+							hide('modal-hapus-user');
+							showBlock('notif-hapus');
+						}
+					}
+				};
+
+				xhttp.open("DELETE", "/api/user-account/" + idToDelete, true);
+				xhttp.send();
+			}
+			
+			//~ Content filler
+			function fillUserList(data) {
+				if(data.length > 0) {
+					showBlock('data-table-container');
+					
+					let userListParent = document.getElementById("data-list");
+					let nomor = ((halaman - 1) * 10) + 1;
+					
+					// Isi data
+					data.forEach(function(datum) {
+						// Deklarasi elemen
+						let userRow = document.createElement("tr");
+						let noContainer = document.createElement("td");
+						let namaContainer = document.createElement("td");
+						let nrpContainer = document.createElement("td");
+						let controlContainer = document.createElement("td");
+						let editButton = document.createElement("i");
+						let deleteButton = document.createElement("i");
+						let noText = document.createTextNode(nomor);
+						let namaText = document.createTextNode(datum.nama);
+						let nrpText = document.createTextNode(datum.username);
+						let whitespace = document.createTextNode(" ");
+						
+						// Isi konten elemen
+						userRow.setAttribute("class", "user-row");
+						editButton.setAttribute("class", "fa fa-edit w3-green w3-hover-green w3-round w3-padding-small cursor-pointer w3-medium");
+						deleteButton.setAttribute("class", "fa fa-remove w3-red w3-hover-red w3-round w3-padding-small cursor-pointer w3-medium");
+						editButton.setAttribute("onclick", "bukaModalEdit(" + datum.id + ")");
+						deleteButton.setAttribute("onclick", "bukaModalHapus(" + datum.id + ")");
+						
+						// Gabungkan elemen
+						noContainer.append(noText);
+						namaContainer.append(namaText);
+						nrpContainer.append(nrpText);
+						controlContainer.append(editButton);
+						controlContainer.append(whitespace);
+						controlContainer.append(deleteButton);
+						userRow.append(noContainer);
+						userRow.append(namaContainer);
+						userRow.append(nrpContainer);
+						userRow.append(controlContainer);
+						userListParent.append(userRow);
+						
+						nomor++;
+					});
+				} else {
+					showBlock('data-empty-container');
+				}
+			}
+			
+			function fillUserEdit(datum) {
+				document.getElementById("nrp-admin-lama").value = datum.username;
+				document.getElementById("nama-admin-lama").value = datum.nama;
+				idToEdit = datum.id;
+			}
+			
+			function fillUserHapus(datum) {
+				document.getElementById("nama-hapus-user").innerHTML = datum.nama;
+				idToDelete = datum.id;
+			}
+			
+			function fillHalamanAktif(halaman=1) {
+				document.getElementById("hal-aktif-atas").innerHTML = halaman;
+				document.getElementById("hal-aktif-bawah").innerHTML = halaman;
+				document.getElementById("halaman-tujuan").value = halaman;
+			}
+			
+			//~ Data generator
+			function tambahkanUser() {
+				let data = {
+					username: inputNRPBaru.value,
+					password: inputNRPBaru.value,
+					nama: inputNamaBaru.value,
+					role: 2,
+				};
+				
+				tombolTambahBaru.classList.remove("w3-green","w3-hover-green");
+				tombolTambahBaru.classList.add("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				inputNRPBaru.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				inputNamaBaru.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				showBlock('loading-simpan-baru');
+				postUser(data);
+			}
+			
+			function editUser() {
+				let data = {
+					id: idToEdit,
+					username: inputNRPLama.value,
+					password: "",
+					nama: inputNamaLama.value,
+					role: 2,
+				};
+				
+				tombolTambahLama.classList.remove("w3-green","w3-hover-green");
+				tombolTambahLama.classList.add("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				inputNRPLama.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				inputNamaLama.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				showBlock('loading-simpan-lama');
+				putUser(data);
+			}
+			
+			function tujuHalaman() {
+				halTujuan = document.getElementById("halaman-tujuan").value;
+				
+				if(halTujuan < 0) {
+					halaman = 1;
+				} else if(halTujuan > halamanMaks) {
+					halaman = halamanMaks;
+				} else if(halTujuan != halaman && halTujuan != "") {
+					halaman = halTujuan;
+					
+					bukaHalaman(halaman);
+				}
+				
+				hide('modal-pagination');
+				document.getElementById("halaman-tujuan").value = halaman;
+			}
+			
+			//~ Fungsi lain
+			function bukaHalaman(halaman) {
+				resetUserList();
+				getUserList(halaman);
+				fillHalamanAktif(halaman);
+			}
+			
+			function next() {
+				if((halaman + 1) <= halamanMaks) {
+					bukaHalaman(++halaman);
+				}
+			}
+			
+			function prev() {
+				if((halaman - 1) > 0) {
+					bukaHalaman(--halaman);
+				}
+			}
+			
+			function bukaModalEdit(id) {
+				getUser(id, "edit");
+				showBlock('modal-edit-user');
+			}
+			
+			function bukaModalHapus(id) {
+				getUser(id, "hapus");
+				showBlock('modal-hapus-user');
+			}
+			
+			function resetUserList() {
+				let userRow = document.getElementsByClassName("user-row");
+				
+				while(userRow.length) {
+					userRow[0].parentNode.removeChild(userRow[0]);
+				}
+			}
+			
+			//~ Fungsi dari template
+			function showNav() {
+				var x = document.getElementById("menu-small");
+				
+				if (x.className.indexOf("w3-show") == -1) {
+					x.className += " w3-show";
+				} else { 
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			function showMenu() {
+				var x = document.getElementById("menu-dropdown");
+				if (x.className.indexOf("w3-show") == -1) { 
+					x.className += " w3-show";
+				} else {
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			//~ Eksekusi fungsi
+			getMaksHalaman();
+			{{#if flash.tambah}}
+			showBlock('modal-tambah-user');
+			{{/if}}
+		</script>
+
+	</body>
+</html>

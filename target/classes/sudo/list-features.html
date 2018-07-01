@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Administrasi Lokasi | CrimeGIS</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/assets/css/w3.css">
+		<link rel="stylesheet" href="/assets/css/style.css">
+		<link rel="stylesheet" href="/assets/css/w3-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<script src="/assets/js/w3.js"></script>
+	</head>
+	
+	<body class="color-base">
+
+		<!-- Navbar -->
+		<div class="w3-top">
+			<div class="w3-bar color-accent w3-left-align">
+				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-hover-white w3-theme-d2" href="javascript:void(0);" onclick="showNav()"><i class="fa fa-bars"></i></a>
+				<a href="/sudo" class="w3-bar-item w3-button font-great-lakes w3-theme-d2 w3-hover-theme-d2">CrimeGIS</a>
+				<a href="#" class="w3-bar-item w3-button font-great-lakes w3-theme-d1 w3-hover-theme-d1"><i class="fa fa-caret-right"></i></a>
+				<a href="/sudo" class="w3-bar-item w3-button w3-theme w3-hover-theme">Administrasi Lokasi</a>
+				
+				<div class="w3-dropdown-click w3-hide-small w3-right">
+					<button class="w3-button w3-hover-theme" title="Menu" onclick="showMenu()">
+						<i class="fa fa-user-circle-o"></i>
+					</button>
+					
+					<div id="menu-dropdown" class="w3-dropdown-content w3-card-4 w3-bar-block w3-animate-opacity" style="right:0">
+						<div class="w3-bar-item">
+							<span class="bold">{{ session.nama }}</span> <br>
+							<span class="w3-small">Super Administrator</span>
+						</div>
+						<a href="/sudo/pengaturan" class="w3-bar-item w3-button w3-hover-theme">Pengaturan</a>
+						<a href="/sudo/logout" class="w3-bar-item w3-button w3-hover-theme">Logout</a>
+					</div>
+				</div>
+				
+				<a href="/sudo/user" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi User</a>
+				<a href="/sudo/lokasi" class="w3-bar-item w3-button w3-hide-small w3-hover-theme-d2 w3-right">Administrasi Lokasi</a>
+			</div>
+
+			<!-- Navbar on small screens -->
+			<div id="menu-small" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
+				<a href="/sudo/pengaturan" class="w3-bar-item w3-button">Pengaturan</a>
+				<a href="/sudo/logout" class="w3-bar-item w3-button">Logout</a>
+			</div>
+		</div>
+
+		<!-- Toolbar -->
+		<div class="w3-row-padding w3-padding-16" id="toolbar-list" style="margin-top: 48px">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest">
+				<div class="w3-col l5">
+					<div class="w3-border w3-round w3-border-theme w3-margin-right">
+						<div class="w3-col w3-third w3-center w3-padding w3-theme">
+							Jenis Lokasi
+						</div>
+						
+						<div class="w3-row w3-rest cursor-pointer" onclick="showBlock('modal-pilih-jenis')">
+							<div class="w3-col l2 w3-right w3-padding w3-center">
+								<i class="fa fa-caret-down"></i>
+							</div>
+							
+							<div class="w3-rest w3-padding" id="status-jenis-lokasi" style="text-transform: capitalize"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="w3-rest w3-theme w3-right w3-round">
+					<button class="w3-button w3-hover-theme" onclick="prev()">
+						<i class="fa fa-caret-left"></i>
+					</button>
+					
+					<button class="w3-button color-base color-base-hover w3-border" onclick="showBlock('modal-pagination')">
+						<span id="hal-aktif-atas"></span> dari <span id="max-hal-atas"></span>
+					</button>
+					
+					<button class="w3-button w3-hover-theme" onclick="next()">
+						<i class="fa fa-caret-right"></i>
+					</button>
+				</div>
+			</div>
+
+		</div>
+		<!-- Toolbar end -->
+		
+		<!-- Toolbar edit -->
+		<div class="w3-row-padding w3-padding-16" id="toolbar-edit" style="margin-top:48px;display:none">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest">
+				<div class="w3-col l5">
+					<div class="w3-border w3-round w3-border-theme w3-margin-right">
+						<div class="w3-col w3-third w3-center w3-padding w3-theme">
+							Jenis Lokasi
+						</div>
+						
+						<div class="w3-row w3-rest cursor-pointer" onclick="showBlock('modal-pilih-jenis-edit')">
+							<div class="w3-col l2 w3-right w3-padding w3-center">
+								<i class="fa fa-caret-down"></i>
+							</div>
+							
+							<div class="w3-rest w3-padding" id="status-jenis-lokasi-edit" style="text-transform: capitalize"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="w3-col l5 w3-right w3-round">
+					<div class="w3-border w3-round w3-border-theme w3-margin-left">
+						<div class="w3-col l1 w3-right">
+							<label for="cari-tempat" class="cursor-pointer w3-right w3-padding">
+								<i class="fa fa-search w3-small"></i>
+							</label>
+						</div>
+						
+						<div class="w3-row w3-rest w3-margin-left">
+							<input type="search" id="cari-tempat" class="w3-input w3-border-0 color-base" placeholder="Cari mis. Universitas Kehidupan">
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- Toolbar edit end -->
+		
+		<!-- Edit form -->
+		<div id="edit-form" class="w3-row-padding w3-animate-opacity" style="display:none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-border w3-round w3-white w3-padding-large">
+					<i class="fa fa-close w3-right cursor-pointer color-accent-text" onclick="keluarEdit()"></i>
+					
+					<label for="nama-input" class="w3-label bold color-accent-text">Nama</label> <br>
+					<input type="text" class="w3-input" id="nama-input" placeholder="Mis. Kantor Kepala Desa"> <br>
+					
+					<label for="keterangan-input" class="w3-label bold color-accent-text">Keterangan</label> <br>
+					<input type="text" class="w3-input" id="keterangan-input" placeholder="Mis. Dekat rumah saya"> <br>
+					
+					<input type="hidden" class="w3-input" id="lokasi">
+					
+					<div class="w3-row">
+						<a href="#" class="w3-button w3-blue w3-round w3-right w3-margin-top" onclick="simpanEdit()" id="tombol-simpan">Simpan</a>
+						<a href="#" class="w3-button w3-red w3-round w3-right w3-margin-top w3-margin-right" id="tombol-batal" onclick="keluarEdit()">Batal</a>
+						<i class="fa fa-refresh w3-spin w3-right w3-margin-top w3-padding" style="font-size:18px;display:none" id="loading-simpan"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Edit form end -->
+		
+		<!-- Notifikasi -->
+		<div id="notif-simpan" class="w3-row-padding w3-animate-opacity" style="display:none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-green w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>Data berhasil disimpan.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="notif-hapus" class="w3-row-padding w3-animate-opacity" style="display:none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-red w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>Data berhasil dihapus.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="notif-gagal" class="w3-row-padding w3-animate-opacity" style="display:none">
+			<div class="w3-col l1 w3-left">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-margin-bottom">
+				<div class="w3-round w3-red w3-padding cursor-pointer" onclick="hideNotif(this)">
+					<p>Terjadi kesalahan, coba lagi nanti.</p>
+				</div>
+			</div>
+		</div>
+		<!-- Notifikasi end -->
+
+		<!-- Map -->
+		<div id="container-map" class="w3-row-padding w3-margin-bottom">
+			
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div id="map" class="w3-rest w3-round" style="height:500px"></div>
+
+		</div>
+		
+		<!-- Tabel data -->
+		<div class="w3-row-padding w3-margin-bottom" id="container-tabel-data">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest w3-responsive w3-round w3-theme" id="data-table-container" style="display:none">
+				<table class="w3-table w3-bordered w3-border w3-striped w3-hoverable" id="data-table">
+					<thead>
+						<tr>
+							<th style="width:10%">No</th>
+							<th style="width:30%">Nama</th>
+							<th style="width:20%">Jenis</th>
+							<th style="width:30%">Keterangan</th>
+							<th style="width:10%">Opsi</th>
+						</tr>
+					</thead>
+					
+					<tbody class="color-base" id="data-list"></tbody>
+					
+					<tfoot>
+						<tr>
+							<td colspan="4"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			<div class="w3-rest w3-round w3-theme-light w3-card w3-padding-large w3-leftbar w3-border-theme" id="data-empty-container" style="display:none">
+				<p>Belum ada data untuk jenis lokasi ini. Klik <a href="#" onclick="showBlock('modal-tambah-user')">di sini</a> untuk menambahkan data baru.</p>
+			</div>
+
+		</div>
+		
+		<br>
+		
+		<!-- Bottom pagination -->
+		<div class="w3-row-padding" id="bottom-pagination">
+
+			<div class="w3-col l1">
+				&nbsp;
+			</div>
+			
+			<div class="w3-col l1 w3-right">
+				&nbsp;
+			</div>
+			
+			<div class="w3-rest">
+				<div class="w3-col l5">
+					&nbsp;
+				</div>
+				
+				<div class="w3-col l5 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="w3-rest w3-theme w3-round w3-center">
+					<button class="w3-button w3-hover-theme" onclick="prev()">
+						<i class="fa fa-caret-left"></i>
+					</button>
+					
+					<button class="w3-button color-base color-base-hover w3-border" onclick="showBlock('modal-pagination')">
+						<span id="hal-aktif-bawah"></span> dari <span id="max-hal-bawah"></span>
+					</button>
+					
+					<button class="w3-button w3-hover-theme" onclick="next()">
+						<i class="fa fa-caret-right"></i>
+					</button>
+				</div>
+			</div>
+
+		</div>
+		
+		<!-- Button plus -->
+		<a href="/sudo/lokasi/tambah">
+			<button type="button" class="w3-button w3-circle w3-theme-d1 w3-card w3-hover-theme w3-xlarge" style="position:fixed;bottom:30px;right:30px">
+				<i class="fa fa-plus"></i>
+			</button>
+		</a>
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 color-base w3-center">
+			<p>2018 &copy; <b>CrimeGIS</b></p>
+			<p class="w3-small">Template oleh <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+		</footer>
+		
+		<!-- Modals -->
+		<div id="modal-pagination" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-pagination')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Buka halaman (maks. <span id="max-hal-modal"></span>)
+						</div>
+					</header>
+					
+					<!-- Input form -->
+					
+					<div id="input-administrator-baru" class="w3-white w3-container w3-padding-large w3-row">
+						<button onclick="tujuHalaman()" class="w3-col l2 w3-green w3-button w3-right w3-round w3-hover-green">Buka</button>
+						
+						<input id="halaman-tujuan" type="text" class="w3-input w3-white w3-col l9">
+					</div>
+					
+					<!-- Input Form End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-pilih-jenis" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-pilih-jenis')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Pilih Jenis Lokasi yang Ditampilkan
+						</div>
+					</header>
+					
+					<!-- Pilihan Features -->
+					
+					<div id="daftar-jenis-list"></div>
+					
+					<!-- Pilihan Features End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-pilih-jenis-edit" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-theme w3-col l8 w3-round w3-card-4">
+					<header class="w3-row w3-padding">
+						<div
+							class="w3-red w3-col l1 w3-right w3-round w3-center w3-padding cursor-pointer"
+							onclick="hide('modal-pilih-jenis-edit')">
+							
+							<i class="fa fa-close"></i>
+						</div>
+						
+						<div class="w3-rest bold padding-little-tb">
+							Pilih Jenis Lokasi yang Ditampilkan
+						</div>
+					</header>
+					
+					<!-- Pilihan Features -->
+					
+					<div id="daftar-jenis-edit"></div>
+					
+					<!-- Pilihan Features End -->
+					
+					<footer class="w3-row" style="height:5px">
+						&nbsp;
+					</footer>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-hapus-features" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom">
+				<div class="container w3-round w3-col l2 w3-left">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-round w3-col l2 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="container w3-red w3-col l8 w3-round w3-card-4">
+					<!-- Input form -->
+					
+					<div id="info-hapus-features" class="w3-white w3-container w3-padding-large w3-round">
+						<p class="bold">Hapus <span id="nama-hapus-features"></span>?</p>
+						
+						<p>Lokasi yang sudah dihapus tidak bisa dikembalikan lagi dan seluruh data yang berhubungan dengannya akan terhapus secara otomatis.</p>
+						
+						<button class="w3-red w3-button w3-right w3-round w3-hover-red" onclick="deleteFeatures()">Hapus</button>
+						<button class="color-base w3-button w3-right w3-round color-base-hover w3-margin-right" onclick="hide('modal-hapus-features')">Batal</button><br><br>
+					</div>
+					
+					<!-- Input Form End -->
+				</div>
+			</div>
+		</div>
+		<!-- Modals end -->
+
+		<script>
+			//~ Deklarasi variabel
+			let map;
+			let markers = [];
+			let halamanMaks = 0;
+			let halaman = 1;
+			let idToEdit = 0;
+			let idJenisToEdit = 1;
+			let idToDelete = 0;
+			let jenisLokasi = [];
+			let jenisAktif = "";
+			let jenisAktifEdit = "";
+			let rowAktif = "";
+			let iconAktif = "/assets/icons/kantorpolisi.png";
+			let editMode = false;
+			let inputNama = document.getElementById('nama-input');
+			let inputKeterangan = document.getElementById('keterangan-input');
+			let tombolSimpan = document.getElementById('tombol-simpan');
+			let tombolBatal = document.getElementById('tombol-batal');
+			
+			//~ API GET
+			function getJenisLokasi() {
+				var HTTPRequest = new XMLHttpRequest();
+				HTTPRequest.onreadystatechange = function() {
+					if(this.readyState == 4 && this.status == 200) {
+						fillJenisLokasi(JSON.parse(this.responseText));
+					}
+				};
+				HTTPRequest.open("GET", "/api/jenis-lokasi", true);
+				HTTPRequest.send();
+			}
+			
+			function getFeaturesList(halaman=1,idJenisLokasi=0) {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						fillFeaturesList(JSON.parse(this.responseText));
+					}
+				};
+
+				xhttp.open("GET", "/api/features?halaman=" + halaman + "&jenis=" + idJenisLokasi, true);
+				xhttp.send();
+			}
+			
+			function getFeatures(id, tujuan) {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if(tujuan == "edit") {
+							setMapOnAll(null);
+							editMode = true;
+							fillFormEdit(JSON.parse(this.responseText));
+						} else if(tujuan == "hapus") {
+							fillFeaturesHapus(JSON.parse(this.responseText));
+						}
+					}
+				};
+
+				xhttp.open("GET", "/api/features/" + id, true);
+				xhttp.send();
+			}
+			
+			function getMaksHalaman(jenis=0) {
+				var xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						halamanMaks = JSON.parse(this.responseText);
+						
+						document.getElementById("max-hal-atas").innerHTML = halamanMaks;
+						document.getElementById("max-hal-bawah").innerHTML = halamanMaks;
+						document.getElementById("max-hal-modal").innerHTML = halamanMaks;
+						
+						if(halaman > halamanMaks) {
+							halaman = halamanMaks;
+							
+							bukaHalaman(halaman,jenis);
+						} else {
+							bukaHalaman(halaman,jenis);
+						}
+					}
+				};
+
+				xhttp.open("GET", "/api/max-hal/features?jenis=" + jenis, true);
+				xhttp.send();
+			}
+			
+			//~ API PUT
+			function putFeatures(data) {
+				let xhr = new XMLHttpRequest();
+			
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						if(JSON.parse(this.responseText)) {
+							keluarEdit();
+							showBlock("notif-simpan");
+						} else {
+							keluarEdit();
+							showBlock("notif-gagal");
+						}
+					}
+				};
+				
+				xhr.open('PUT', '/api/features', true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.send(JSON.stringify(data));
+			}
+			
+			//~ API DELETE
+			function deleteFeatures() {
+				let xhttp = new XMLHttpRequest();
+
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if(JSON.parse(this.responseText)) {
+							getMaksHalaman();
+							
+							hide('modal-hapus-features');
+							showBlock('notif-hapus');
+						}
+					}
+				};
+
+				xhttp.open("DELETE", "/api/features/" + idToDelete, true);
+				xhttp.send();
+			}
+			
+			//~ Content filler
+			function fillJenisLokasi(data) {
+				let mainContainer, contentContainer, iconContainer, textContainer, text, icon;
+				let parentContainer = document.getElementById("daftar-jenis-list");
+				let parentContainer2 = document.getElementById("daftar-jenis-edit");
+				
+				data.unshift({
+					id: 0,
+					jenis: "semua"
+				});
+				
+				data.forEach(function(datum) {
+					jenisLokasi.push(datum);
+					//~ Inisialisasi element
+					mainContainer = document.createElement("div");
+					contentContainer = document.createElement("div");
+					iconContainer = document.createElement("div");
+					textContainer = document.createElement("div");
+					icon = document.createElement("img");
+					text = document.createTextNode(datum.jenis);
+					
+					//~ Isi konten elemen
+					mainContainer.setAttribute("class", "w3-row color-base w3-border-bottom cursor-pointer w3-hover-theme-light");
+					contentContainer.setAttribute("class", "w3-row w3-padding-16");
+					iconContainer.setAttribute("class", "w3-center w3-col l2");
+					textContainer.setAttribute("class", "w3-rest w3-padding w3-large capitalize");
+					mainContainer.setAttribute("id", "id" + datum.id);
+					textContainer.setAttribute("id", "jid" + datum.id);
+					mainContainer.setAttribute("onclick", "selectJenis(this.id)");
+					
+					if(datum.id != 0) {
+						icon.setAttribute("src", "/assets/icons/" + datum.jenis.replace(" ","") + ".png");
+					} else {
+						icon.setAttribute("src", "/assets/icons/default.png");
+					}
+					
+					//~ Gabungkan elemen
+					iconContainer.appendChild(icon);
+					textContainer.appendChild(text);
+					contentContainer.appendChild(iconContainer);
+					contentContainer.appendChild(textContainer);
+					mainContainer.appendChild(contentContainer);
+					parentContainer.appendChild(mainContainer);
+					
+					if(datum.id != 0) {
+						parentContainer2.appendChild(mainContainer.cloneNode(true));
+						parentContainer2.lastChild.id = "ide" + datum.id;
+						parentContainer2.lastChild.setAttribute("onclick", "selectJenisEdit(this.id)");
+						parentContainer2.lastChild.firstChild.lastChild.id = "jide" + datum.id;
+					}
+				});
+				
+				selectJenis("id" + data[0].id);
+			}
+			
+			function fillFeaturesList(data) {
+				if(data.length > 0) {
+					hide('data-empty-container');
+					showBlock('data-table-container');
+					
+					let featuresListParent = document.getElementById("data-list");
+					let nomor = ((halaman - 1) * 10) + 1;
+					let dataMarker = [];
+					
+					// Isi data
+					data.forEach(function(datum) {
+						//~ Persiapan data marker
+						let latLng = datum.lokasi.replace("POINT(","").replace(")","").split(" ");
+						let jenis = jenisLokasi.filter(function(jLokasi) {
+							return jLokasi.id == datum.idJenisLokasi;
+						})[0].jenis;
+						
+						dataMarker.push({
+							nama: datum.nama,
+							jenis: jenis,
+							latLng: {
+								lat: parseFloat(latLng[1]),
+								lng: parseFloat(latLng[0])
+							}
+						});
+						
+						// Deklarasi elemen
+						let featuresRow = document.createElement("tr");
+						let noContainer = document.createElement("td");
+						let namaContainer = document.createElement("td");
+						let jenisContainer = document.createElement("td");
+						let keteranganContainer = document.createElement("td");
+						let controlContainer = document.createElement("td");
+						let editButton = document.createElement("i");
+						let deleteButton = document.createElement("i");
+						let noText = document.createTextNode(nomor);
+						let namaText = document.createTextNode(datum.nama);
+						let jenisText = document.createTextNode(jenis);
+						let keteranganText = document.createTextNode(datum.keterangan);
+						let whitespace = document.createTextNode(" ");
+						
+						// Isi konten elemen
+						featuresRow.setAttribute("class", "features-row");
+						featuresRow.setAttribute("id", "row" + datum.id);
+						jenisContainer.setAttribute("class", "capitalize");
+						editButton.setAttribute("class", "fa fa-edit w3-green w3-hover-green w3-round w3-padding-small cursor-pointer w3-medium");
+						deleteButton.setAttribute("class", "fa fa-remove w3-red w3-hover-red w3-round w3-padding-small cursor-pointer w3-medium");
+						editButton.setAttribute("onclick", "getFeatures(" + datum.id + ", 'edit')");
+						deleteButton.setAttribute("onclick", "bukaModalHapus(" + datum.id + ")");
+						
+						// Gabungkan elemen
+						noContainer.append(noText);
+						namaContainer.append(namaText);
+						jenisContainer.append(jenisText);
+						keteranganContainer.append(keteranganText);
+						controlContainer.append(editButton);
+						controlContainer.append(whitespace);
+						controlContainer.append(deleteButton);
+						featuresRow.append(noContainer);
+						featuresRow.append(namaContainer);
+						featuresRow.append(jenisContainer);
+						featuresRow.append(keteranganContainer);
+						featuresRow.append(controlContainer);
+						featuresListParent.append(featuresRow);
+						
+						nomor++;
+					});
+					
+					fillMarkers(dataMarker);
+				} else {
+					hide('data-table-container');
+					showBlock('data-empty-container');
+				}
+			}
+			
+			function fillMarkers(data) {
+				data.forEach(function(datum) {
+					var marker = new google.maps.Marker({
+						title: datum.nama,
+						position: datum.latLng,
+						map: map,
+						icon: "/assets/icons/" + datum.jenis.replace(" ","") + ".png"
+					});
+					
+					markers.push(marker);
+				});
+			}
+			
+			function fillHalamanAktif(halaman=1) {
+				document.getElementById("hal-aktif-atas").innerHTML = halaman;
+				document.getElementById("hal-aktif-bawah").innerHTML = halaman;
+				document.getElementById("halaman-tujuan").value = halaman;
+			}
+			
+			function fillFormEdit(data) {
+				let lokasi = data.lokasi.replace("POINT(","").replace(")","");
+				let jenis = jenisLokasi.filter(function(jLokasi) {
+						return jLokasi.id == data.idJenisLokasi;
+					})[0].jenis;
+				idToEdit = data.id;
+				idJenisToEdit = data.idJenisLokasi;
+				
+				hide("toolbar-list");
+				showBlock("toolbar-edit");
+				showBlock("edit-form");
+				selectJenisEdit("ide" + data.idJenisLokasi);
+				selectRow("row" + data.id);
+				
+				document.getElementById("nama-input").value = data.nama;
+				document.getElementById("keterangan-input").value = data.keterangan;
+				document.getElementById("lokasi").value = lokasi;
+			}
+			
+			function fillNamaLokasi(nama) {
+				document.getElementById("nama-input").value = nama;
+			}
+			
+			function fillLatLng(lat, lng) {
+				document.getElementById("lokasi").value = lng + " " + lat;
+			}
+			
+			function fillFeaturesHapus(datum) {
+				document.getElementById("nama-hapus-features").innerHTML = datum.nama;
+				idToDelete = datum.id;
+			}
+			
+			//~ Data generator
+			function tujuHalaman() {
+				halTujuan = document.getElementById("halaman-tujuan").value;
+				
+				if(halTujuan < 0) {
+					halaman = 1;
+				} else if(halTujuan > halamanMaks) {
+					halaman = halamanMaks;
+				} else if(halTujuan != halaman && halTujuan != "") {
+					halaman = halTujuan;
+					
+					bukaHalaman(halaman);
+				}
+				
+				hide('modal-pagination');
+				document.getElementById("halaman-tujuan").value = halaman;
+			}
+			
+			function simpanEdit() {
+				let lokasiText = "POINT(" + document.getElementById("lokasi").value + ")";
+				
+				let JSONObject = {
+					"id" : idToEdit,
+					"nama" : document.getElementById("nama-input").value,
+					"idJenisLokasi" : idJenisToEdit,
+					"lokasi" : lokasiText,
+					"waktuInput" : "",
+					"keterangan" : document.getElementById("keterangan-input").value
+				};
+				
+				inputNama.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				inputKeterangan.classList.add("cursor-not-allowed","w3-text-gray","color-base");
+				tombolSimpan.classList.remove("w3-blue");
+				tombolBatal.classList.remove("w3-red");
+				tombolSimpan.classList.add("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				tombolBatal.classList.add("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				showBlock('loading-simpan');
+				putFeatures(JSONObject);
+			}
+			
+			//~ Fungsi dari template
+			function showNav() {
+				var x = document.getElementById("menu-small");
+				
+				if (x.className.indexOf("w3-show") == -1) {
+					x.className += " w3-show";
+				} else { 
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			function showMenu() {
+				var x = document.getElementById("menu-dropdown");
+				if (x.className.indexOf("w3-show") == -1) { 
+					x.className += " w3-show";
+				} else {
+					x.className = x.className.replace(" w3-show", "");
+				}
+			}
+			
+			//~ Fungsi untuk map
+			function initMap(zoomSize=11,lat=-7.257472,lang=112.752088) {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: {lat: lat, lng: lang},
+					zoom: zoomSize
+				});
+				
+				//~ Fungsi pencarian lokasi
+				var searchInput = /** @type {!HTMLInputElement} */(document.getElementById('cari-tempat'));
+				var autocomplete = new google.maps.places.Autocomplete(searchInput);
+				var infowindow = new google.maps.InfoWindow();
+				var marker = new google.maps.Marker({
+					map: map,
+					anchorPoint: new google.maps.Point(0, -29)
+				});
+				
+				autocomplete.bindTo('bounds', map);
+				
+				autocomplete.addListener('place_changed', function() {
+					infowindow.close();
+					marker.setVisible(false);
+					
+					var place = autocomplete.getPlace();
+					
+					if (!place.geometry) {
+						window.alert("Lokasi yang berhubungan dengan '" + place.name + "' tidak ditemukan");
+						return;
+					}
+
+					if (place.geometry.viewport) {
+						map.fitBounds(place.geometry.viewport);
+					} else {
+						map.setCenter(place.geometry.location);
+						map.setZoom(17); 
+					}
+					
+					markThis(place.geometry.location, "search");
+					fillNamaLokasi(place.name);
+				});
+				
+				map.addListener('click', function(event) {
+					if(editMode) {
+						markThis(event, "click");
+					}
+				});
+			}
+			
+			function markThis(sumber, jenis="click") {
+				setMapOnAll(null);
+				let latToMark;
+				let lngToMark;
+				
+				if(jenis == "click") {
+					latToMark = sumber.latLng.lat();
+					lngToMark = sumber.latLng.lng();
+				} else if(jenis == "search") {
+					let latLngToMark = [];
+					sumber = sumber.toString().replace("(", "").replace(")", "");
+					latLngToMark = sumber.split(", ");
+					latToMark = parseFloat(latLngToMark[0]);
+					lngToMark = parseFloat(latLngToMark[1]);
+				}
+				
+				var marker = new google.maps.Marker({
+					position: {
+						lat: latToMark,
+						lng: lngToMark
+					},
+					map: map,
+					icon: iconAktif
+				});
+				
+				fillLatLng(latToMark, lngToMark);
+				showBlock("edit-form");
+				markers.push(marker);
+			}
+			
+			function setMapOnAll(map) {
+				for (var i = 0; i < markers.length; i++) {
+					markers[i].setMap(map);
+				}
+			}
+			
+			//~ Fungsi lain
+			function bukaHalaman(halaman, jenis=0) {
+				resetFeaturesList();
+				getFeaturesList(halaman,jenis);
+				fillHalamanAktif(halaman);
+			}
+			
+			function next() {
+				if((halaman + 1) <= halamanMaks) {
+					bukaHalaman(++halaman);
+				}
+			}
+			
+			function prev() {
+				if((halaman - 1) > 0) {
+					bukaHalaman(--halaman);
+				}
+			}
+			
+			function resetFeaturesList() {
+				let featuresRow = document.getElementsByClassName("features-row");
+				
+				while(featuresRow.length) {
+					featuresRow[0].parentNode.removeChild(featuresRow[0]);
+				}
+				
+				setMapOnAll(null);
+			}
+			
+			function selectJenis(id){
+				let jenisContainer = document.getElementById(id);
+				
+				if(jenisAktif != "") {
+					document.getElementById(jenisAktif).classList.remove("w3-theme-light");
+				}
+				
+				jenisAktif = id;
+				
+				getMaksHalaman(id.replace("id",""));
+				changeJenisStatus(id);
+				jenisContainer.classList.add("w3-theme-light");
+				hide("modal-pilih-jenis");
+			}
+			
+			function selectJenisEdit(id){
+				setMapOnAll(null);
+				
+				let jenisContainer = document.getElementById(id);
+				let nama = document.getElementById("nama-input").value;
+				let jenis = jenisContainer.firstChild.lastChild.innerHTML;
+				let lokasi = document.getElementById("lokasi").value;
+				let latLng = lokasi.split(" ");
+				let dataMarker = [];
+				
+				dataMarker.push({
+					nama: nama,
+					jenis: jenis,
+					latLng: {
+						lat: parseFloat(latLng[1]),
+						lng: parseFloat(latLng[0])
+					}
+				});
+				
+				if(jenisAktifEdit != "") {
+					document.getElementById(jenisAktifEdit).classList.remove("w3-theme-light");
+				}
+				
+				jenisAktifEdit = id;
+				idJenisToEdit = id.replace("ide","");
+				
+				fillMarkers(dataMarker);
+				changeJenisStatusEdit(id);
+				changeMarkerIcon(id);
+				jenisContainer.classList.add("w3-theme-light");
+				hide("modal-pilih-jenis-edit");
+			}
+			
+			function selectRow(id){
+				let rowTerpilih = document.getElementById(id);
+				
+				if(rowAktif != "") {
+					document.getElementById(rowAktif).classList.remove("w3-theme-l1");
+				}
+				
+				rowAktif = id;
+				
+				rowTerpilih.classList.add("w3-theme-l1");
+			}
+			
+			function changeJenisStatus(id) {
+				let jenisId = document.getElementById("j" + id).innerHTML;
+				
+				document.getElementById("status-jenis-lokasi").innerHTML = jenisId;
+			}
+			
+			function changeJenisStatusEdit(id) {
+				let jenisId = document.getElementById("j" + id).innerHTML;
+				
+				document.getElementById("status-jenis-lokasi-edit").innerHTML = jenisId;
+			}
+			
+			function changeMarkerIcon(id) {
+				let namaIcon = document.getElementById("j" + id).innerHTML.replace(" ", "");
+				iconAktif = "/assets/icons/" + namaIcon + ".png";
+			}
+			
+			function keluarEdit() {
+				editMode = false;
+				document.getElementById("cari-tempat").value = "";
+				
+				hide('loading-simpan');
+				hide("toolbar-edit");
+				hide('edit-form');
+				inputNama.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+				inputKeterangan.classList.remove("cursor-not-allowed","w3-text-gray","color-base");
+				tombolSimpan.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				tombolBatal.classList.remove("w3-light-grey","w3-hover-light-grey","cursor-not-allowed");
+				tombolSimpan.classList.add("w3-blue");
+				tombolBatal.classList.add("w3-red");
+				showBlock("toolbar-list");
+				bukaHalaman(halaman, jenisAktif.replace("id",""));
+			}
+			
+			function bukaModalHapus(id) {
+				getFeatures(id, "hapus");
+				showBlock('modal-hapus-features');
+			}
+			
+			//~ Eksekusi fungsi
+			getJenisLokasi();
+			{{#if flash.sukses}}
+			showBlock('notif-simpan');
+			{{/if}}
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQcOydZmjfvdGFyiVqpDHxJFatcgYBfs4&libraries=places&callback=initMap"></script>
+
+
+	</body>
+</html>

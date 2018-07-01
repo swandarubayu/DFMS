@@ -1,0 +1,15 @@
+starter\jdbi\tools\Routes.class
+starter\jdbi\object\RegisterObj.class
+starter\jdbi\object\UserAccountObj.class
+starter\jdbi\api\RegisterApi.class
+starter\jdbi\object\LoginCheck$Mapper.class
+starter\jdbi\object\RegisterObj$Mapper.class
+starter\jdbi\repository\UserAccountRepo.class
+starter\jdbi\api\LoginApi.class
+starter\jdbi\object\UserAccountObj$Mapper.class
+starter\jdbi\api\UserAccountApi.class
+starter\jdbi\controller\SudoC.class
+starter\jdbi\App.class
+starter\jdbi\object\LoginObj$Mapper.class
+starter\jdbi\object\LoginObj.class
+starter\jdbi\object\LoginCheck.class

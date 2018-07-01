@@ -30,6 +30,20 @@
       <artifactId>jooby-netty</artifactId>
     </dependency>
 
+    <!-- JBCrypt -->
+  <dependency>
+    <groupId>org.mindrot</groupId>
+    <artifactId>jbcrypt</artifactId>
+    <version>0.4</version>
+  </dependency>
+  
+  <!-- Handlebars -->
+  <dependency>
+    <groupId>org.jooby</groupId>
+    <artifactId>jooby-hbs</artifactId>
+    <version>1.3.0</version>
+  </dependency>
+    
     <!-- Jackson -->
     <dependency>
       <groupId>org.jooby</groupId>

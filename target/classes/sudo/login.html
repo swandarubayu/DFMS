@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login | CrimeGIS</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/assets/css/w3.css">
+		<link rel="stylesheet" href="/assets/css/style.css">
+		<link rel="stylesheet" href="/assets/css/w3-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<script src="/assets/js/w3.js"></script>
+	</head>
+	
+	<body class="color-base">
+
+		<!-- Login Container -->
+		<div class="w3-container w3-padding-24" id="login">
+			<div class="w3-row w3-padding-24 w3-center">
+				<h1 class="font-great-lakes">CRIMEGIS</h1>
+				<p>untuk <b>Super Administrator</b></p>
+			</div>
+			
+			{{#if flash.gagal}}
+			<div class="w3-row w3-margin-bottom" id="notif-gagal">
+				<div class="w3-col l4 m3 s1">
+					&nbsp;
+				</div>
+				
+				<div class="w3-col l4 m3 s1 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="w3-round w3-red w3-padding cursor-pointer w3-col l4 m6 s10" onclick="hide('notif-gagal')">
+					<p>Username dan/atau password salah.</p>
+				</div>
+			</div>
+			{{/if}}
+			
+			<div class="w3-row">
+				<div class="w3-col l4 m3 s1">
+					&nbsp;
+				</div>
+				
+				<div class="w3-col l4 m3 s1 w3-right">
+					&nbsp;
+				</div>
+				
+				<div class="w3-col l4 m6 s10">
+					<form class="w3-container w3-card-4 w3-padding-16 w3-white w3-round" enctype="application/x-www-form-urlencoded" action="/sudo/login/do" method="post">
+						<div class="w3-section">      
+							<label for="username">Username</label>
+							<input id="username" class="w3-input" type="text" name="username" required>
+						</div>
+
+						<div class="w3-section">      
+							<label for="password">Password</label>
+							<input id="password" class="w3-input" type="password" name="password" required>
+						</div>
+					
+						<input class="w3-check" type="checkbox" name="stay-login">
+						<label>Tetap login</label>
+						
+						<button type="submit" class="w3-button w3-right w3-theme w3-round">Login</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 color-base w3-center">
+			<p>2018 &copy; <b>CrimeGIS</b></p>
+			<p class="w3-small">Template oleh <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+		</footer>
+
+		<script>
+			
+		</script>
+
+	</body>
+</html>

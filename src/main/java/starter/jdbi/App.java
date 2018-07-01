@@ -1,5 +1,11 @@
 package starter.jdbi;
 
+import starter.jdbi.object.*;
+import starter.jdbi.repository.*;
+import starter.jdbi.api.*;
+import starter.jdbi.tools.*;
+import starter.jdbi.controller.*;
+
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jooby.Err;
@@ -11,13 +17,44 @@ import org.jooby.jdbi.Jdbi3;
 import org.jooby.jdbi.TransactionalRequest;
 import org.jooby.json.Jackson;
 import org.jooby.apitool.ApiTool;
-
+import org.jooby.handlers.CorsHandler;
+import org.jooby.hbs.Hbs;
 /**
  * jdbi starter project:
  */
 public class App extends Jooby {
 
   {
+
+    use("*", new CorsHandler());
+    use(new Jackson());
+    use(new Jdbc());
+    use(new Hbs());
+
+    use(new Jdbi3()
+      /** Install SqlObjectPlugin */
+      .doWith(jdbi -> {
+        jdbi.installPlugin(new SqlObjectPlugin());
+      })
+      /** Creates a transaction per request and attach PetRepository */
+      .transactionPerRequest(
+        new TransactionalRequest()
+          .attach(UserAccountRepo.class)
+          
+      )
+    );
+
+    //~ APIs
+    
+    use(new UserAccountApi());
+    use(new LoginApi());
+    use(new RegisterApi());
+    
+    //~ Routes
+    use(new Routes());
+    
+    //~ Controller
+    use(new SudoC());
 
     //~ Asset script
     assets("/assets/**");
@@ -30,75 +67,15 @@ public class App extends Jooby {
     assets("/maps", "movement-maps.html");
     assets("/login", "login.html");    
     }
-
-  {
-    use(new Jackson());
-
-    use(new Jdbc("db.pg2"));
-
-    use(new Jdbi3("db.pg2")
-        /** Install SqlObjectPlugin */
-        .doWith(jdbi -> {
-          jdbi.installPlugin(new SqlObjectPlugin());
-        })
-        /** Creates a transaction per request and attach PetRepository */
-        .transactionPerRequest(
-            new TransactionalRequest()
-                .attach(HistoryRepo.class)
-        )
-    );
-
-    /** Create table + pets: */
-    onStart(() -> {
-      Jdbi jdbi = require("db.pg2",Jdbi.class);
-    });
-
-    path("/api/history", ()  -> {
-        get (req -> {
-            HistoryRepo db = require(HistoryRepo.class);
-
-            int start = req.param("start").intValue(0);
-            int max = req.param("max").intValue(20);
-
-            return db.list(start, max);
-        });
-        get("/:id", req -> {
-                HistoryRepo db = require(HistoryRepo.class);
-
-                int id = req.param("id").intValue();
-
-               History history = db.findById(id);
-                if (history == null) {
-                  throw new Err(Status.NOT_FOUND);
-                }
-
-                return history;
-              });
-
-         post(req -> {
-             HistoryRepo db = require(HistoryRepo.class);
-             History history = req.body(History.class);
-
-             int id;
-             boolean toReturn = false;
-
-             id = db.insert(history);
-
-             if(id > 0) {
-                toReturn = true;
-             }
-
-             return toReturn;
-        });
-   });
-  }
-
+  
     {
     		use(new ApiTool()
     			.swagger("/swagger")
     			.raml("/raml")
     		);
     	}
+
+
 
   public static void main(final String[] args) {
     run(App::new, args);
