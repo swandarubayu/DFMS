@@ -18,13 +18,13 @@ public interface UserAccountRepo {
   /**
    * Daftar User Account dengan jumlah maksimal max data dan dimulai dari start.
    */
-  @SqlQuery("SELECT * FROM user_account WHERE role=2 ORDER BY id DESC LIMIT :max OFFSET :start")
+  @SqlQuery("SELECT * FROM user_account  ORDER BY id DESC LIMIT :max OFFSET :start")
   List<UserAccountObj> list(int start, int max);
   
   /**
    * Daftar User Account dengan jumlah maksimal max data dan dimulai dari start.
    */
-  @SqlQuery("SELECT * FROM user_account WHERE role=2 ORDER BY id DESC LIMIT 5")
+  @SqlQuery("SELECT * FROM user_account  ORDER BY id DESC LIMIT 5")
   List<UserAccountObj> listForDashboard();
 
   /**
@@ -42,13 +42,13 @@ public interface UserAccountRepo {
   /**
    * Password berdasarkan username (untuk login).
    */
- @SqlQuery("SELECT password FROM user_account WHERE username=:username AND role=1")
+ @SqlQuery("SELECT password FROM user_account WHERE username=:username ")
  String findSudoPassword(String username);
 
   /**
    * Total User Account administrator.
    */
- @SqlQuery("SELECT COUNT(*) FROM user_account WHERE role=2")
+ @SqlQuery("SELECT COUNT(*) FROM user_account ")
  int findTotal();
 
   /**
@@ -66,14 +66,14 @@ public interface UserAccountRepo {
   /**
    * Menambahkan User Account dan me-return keberhasilannya.
    */
-  @SqlUpdate("INSERT INTO user_account(username, password, domisili, role) values(:username, :password, :domisili, :role)")
+  @SqlUpdate("INSERT INTO user_account(username, password, domisili) values(:username, :password, :domisili)")
   @GetGeneratedKeys
   int insert(@BindBean UserAccountObj UserAccountObj);
 
   /**
    * Meng-update User Account berdasarkan ID-nya dan me-return keberhasilannya.
    */
-  @SqlUpdate("UPDATE user_account SET username=:username, password=:password, domisili=:domisili, role=:role WHERE id=:id")
+  @SqlUpdate("UPDATE user_account SET username=:username, password=:password, domisili=:domisili, WHERE id=:id")
   boolean update(@BindBean UserAccountObj UserAccountObj);
 
   /**
@@ -81,4 +81,8 @@ public interface UserAccountRepo {
    */
   @SqlUpdate("DELETE FROM user_account WHERE id=:id")
   boolean delete(int id);
+
+
+  
 }
+

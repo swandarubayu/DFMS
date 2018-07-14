@@ -40,6 +40,10 @@ public class App extends Jooby {
       .transactionPerRequest(
         new TransactionalRequest()
           .attach(UserAccountRepo.class)
+          .attach(UserDetailRepo.class)
+          .attach(UserMovRepo.class)
+          .attach(LoginAdminRepo.class)
+          .attach(GridMapRepo.class)
           
       )
     );
@@ -49,6 +53,10 @@ public class App extends Jooby {
     use(new UserAccountApi());
     use(new LoginApi());
     use(new RegisterApi());
+    use(new UserMovApi());
+    use(new LoginAdminApi());
+    use(new GridMapApi());
+
     
     //~ Routes
     use(new Routes());
@@ -58,14 +66,16 @@ public class App extends Jooby {
 
     //~ Asset script
     assets("/assets/**");
-    assets("/css/**");
     
     assets("/coba_input", "coba_input.html");
     assets("/index", "index.html");
-    assets("/user", "user-table.html");
-    assets("/predict", "prediction.html");
-    assets("/maps", "movement-maps.html");
-    assets("/login", "login.html");    
+    assets("/login", "login.html");
+    assets("/usertab", "user_table.html");
+    assets("/UserMov", "UserMovMaps.html");
+    assets("/blank", "blank.html");
+    assets("/RiskArea", "RiskArea.html");
+    assets("/lock", "lock_screen.html");
+    assets("/roatab", "roa_table.html");   
     }
   
     {
