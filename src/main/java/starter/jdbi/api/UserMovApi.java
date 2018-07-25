@@ -26,41 +26,73 @@ public class UserMovApi extends Jooby {
   	use(new FlashScope());
  path("/api/usermov", ()  -> {
   
-        get( req -> {
-                UserMovRepo db = require(UserMovRepo.class);
+  get( req -> {
+    UserMovRepo db = require(UserMovRepo.class);
 
-                // int id = req.param("id").intValue();
+    // int id = req.param("id").intValue();
 
-               UserMovObj usermov = db.findById();
-                if (usermov == null) {
-                  throw new Err(Status.NOT_FOUND);
-                }
+    UserMovObj usermov = db.findById();
+    
+    if (usermov == null) {
+      throw new Err(Status.NOT_FOUND);
+    }
 
-                return usermov;
-              });
+    return usermov;
+  });
 
-         post(req -> {
-             UserMovRepo db = require(UserMovRepo.class);
-             UserMovObj usermov = req.body(UserMovObj.class);
+  post(req -> {
+    UserMovRepo db = require(UserMovRepo.class);
+    UserPositionRepo upr = require(UserPositionRepo.class);
+    GridMapRepo gmr = require(GridMapRepo.class);
+    UserMovObj usermov = req.body(UserMovObj.class);
+    int id;
+    boolean toReturn = false;
 
-             int id;
-             boolean toReturn = false;
+    id = db.insert(usermov);
 
-             id = db.insert(usermov);
+    if(id > 0) {
+      UserPositionObj userPosition = new UserPositionObj(1, usermov.getUser_id(), gmr.getGridId(usermov.getLocation()));
 
-             if(id > 0) {
-                toReturn = true;
-             }
+      if(upr.isExist(usermov.getUser_id()) > 0) {
+        if(upr.update(userPosition) > 0) {
+          toReturn = true;
+        }
+      } else {
+        id = upr.insert(userPosition);
 
-             return toReturn;
-        });
-   });
+        if(id > 0) {
+          toReturn = true;
+        }
+      }
+    }
+
+    return toReturn;
+  });
+
+  });
+
+ // path("/api/LatestLocation", () -> {
+
+
+ //      get(req -> {
+ //        UserMovRepo db = require(UserMovRepo.class);
+
+ //        UserMovObj  = db.findByUpdatedat();
+
+ //        if(findByUpdatedat == null) {
+ //          throw new Err(Status.NOT_FOUND);
+ //        }
+
+ //        return findByUpdatedat;
+ //      });     
+ //    });
+
 
 path("/api/userloc", () -> {
 		get(req -> {
 			UserDetailRepo db = require(UserDetailRepo.class);
 
-			return db.list();
+			return db.findByUpdatedat();
 		});
 	});
 

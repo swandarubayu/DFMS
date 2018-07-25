@@ -10,7 +10,7 @@ public class UserMovObj {
 
   public static class Mapper implements RowMapper<UserMovObj> {
     @Override public UserMovObj map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new UserMovObj(rs.getInt("id"), rs.getInt("user_id"), rs.getString("st_astext"), rs.getString("updatedAt"));
+      return new UserMovObj(rs.getInt("id"), rs.getInt("user_id"), rs.getString("st_astext"), rs.getString("updatedat"));
     }
   }
 
@@ -19,7 +19,7 @@ public class UserMovObj {
   private String location;
   private String updatedat;
 
-  public UserMovObj(int id, int user_id, String location, String updatedAt){
+  public UserMovObj(int id, int user_id, String location, String updatedat){
   this.id=id;
   this.user_id=user_id;
   this.location=location;

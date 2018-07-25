@@ -22,6 +22,6 @@ public interface UserDetailRepo {
    * @param max Max number of rows.
    * @return Available pets.
    */
-  @SqlQuery("SELECT  a.user_id, a.location  FROM user_mov a, user_account b WHERE a.user_id=b.id ")
- List<UserDetailObj> list();
+  @SqlQuery("SELECT id, user_id, ST_AsText(location), updatedat FROM user_mov a WHERE updatedat = (select max(updatedat) from user_mov b where a.user_id = b.user_id)")
+   List<UserDetailObj> findByUpdatedat();
 }

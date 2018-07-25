@@ -10,22 +10,22 @@ public class UserDetailObj {
 
   public static class Mapper implements RowMapper<UserDetailObj> {
     @Override public UserDetailObj map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new UserDetailObj(rs.getInt("id"), rs.getInt("user_id"), rs.getString("st_astext"), rs.getString("updatedAt"));
+      return new UserDetailObj(rs.getInt("id"), rs.getInt("user_id"), rs.getString("st_astext"), rs.getString("updatedat"));
     }
   }
 
   private int      id;
   private int user_id;
-  private String geom;
-  private String date;
+  private String location;
+  private String updatedat;
 
 
  
-  public UserDetailObj(int id, int user_id,  String geom, String date){
+  public UserDetailObj(int id, int user_id,  String location, String updatedat){
   this.id=id;
   this.user_id=user_id;
-  this.geom=geom;
-  this.date=date;
+  this.location=location;
+  this.updatedat=updatedat;
   }
 
   
@@ -37,10 +37,10 @@ public int getId(){
     return user_id;
   }
 
-  public String getGeom(){
-      return geom;
+  public String getLocation(){
+      return location;
   }
-  public String getDate(){
-        return date;
+  public String getupdateat(){
+        return updatedat;
   }
 }

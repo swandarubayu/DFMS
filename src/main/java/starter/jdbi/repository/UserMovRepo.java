@@ -28,34 +28,14 @@ public interface UserMovRepo {
    * @param id Pet ID.
    * @return Pet or null.
    */
-  @SqlQuery("SELECT id, user_id, ST_AsText(location), updatedAt FROM user_mov WHERE id=id ORDER BY id DESC LIMIT 1")
+  @SqlQuery("SELECT id, user_id, ST_AsText(location), updatedat FROM user_mov WHERE id=id ORDER BY id DESC LIMIT 1")
   UserMovObj findById();
 
-  /**
-   * Insert a pet and returns the generated PK.
-   *
-   * @param pet Pet to insert.
-   * @return Primary key.
-   */
-  @SqlUpdate("INSERT INTO user_mov(user_id,  location, updatedat) values(:user_id, ST_GeomFromText(:location, 4326), to_timestamp(:updatedat, 'YYYY-MM-DD HH24-MI-MS'))")
+  
+  @SqlUpdate("INSERT INTO user_mov(user_id, location, updatedat) values(:user_id, ST_GeomFromText(:location, 4326), to_timestamp(:updatedat, 'YYYY-MM-DD HH24-MI-MS'))")
   @GetGeneratedKeys
   int insert(@BindBean UserMovObj UserMovObj);
 
-  /**
-   * Update a pet and returns true if the pets was updated.
-   *
-   * @param pet Pet to update.
-   * @return True if the pet was updated.
-   */
-  /**@SqlUpdate("UPDATE history SET name=:name where id=:id")
-  boolean update(@BindBean Pet pet);*/
-
-  /**
-   * Delete a pet by ID.
-   *
-   * @param id Pet ID.
-   * @return True if the pet was deleted.
-   */
   @SqlUpdate("DELETE user_mov WHERE id=:id")
   boolean delete(long id);
 }

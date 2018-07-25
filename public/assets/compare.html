@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id="coba"></div>
+
+	<script>
+		let user;
+
+		function getDataUser() {
+			// body...
+			let xhr =  new XMLHttpRequest();
+
+			xhr.onreadystatechance = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					JSON.parse(this.responseText());
+				}
+			}
+		}
+	</script>
+</body>
+</html>

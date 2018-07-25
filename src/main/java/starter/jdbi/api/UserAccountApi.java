@@ -20,6 +20,19 @@ import java.util.ArrayList;
 public class UserAccountApi extends Jooby {
 
   {
+  		get("/api/UserList", req -> {
+  			UserAccountRepo db = require(UserAccountRepo.class);
+
+  			// List<UserAccountObj> userAccount = db.listAll();
+
+  			// if(userAccount == null) {
+  			// 	throw new Err(Status.NOT_FOUND);
+  			// }
+
+  			// return userAccount;
+  			return db.listAll();
+  		});	
+
     path("/api/user-account", () -> {
 		/**
 		 * Menambahkan User Account dan me-return statusnya.
@@ -29,7 +42,6 @@ public class UserAccountApi extends Jooby {
 			UserAccountObj userAccount = req.body(UserAccountObj.class);
 			int id;
 			boolean toReturn = false;
-			
 			
 			if(db.isUsernameTaken(userAccount.getUsername()) != 1) {
 				userAccount.setPassword(BCrypt.hashpw(
@@ -76,6 +88,8 @@ public class UserAccountApi extends Jooby {
 			return userAccount;
 		});
 		
+
+
 		/**
 		 * Update User Account berdasarkan ID.
 		 */
@@ -116,6 +130,7 @@ public class UserAccountApi extends Jooby {
 			return status;
 		});
 	});
+
 	
     path("/api/jumlah/user", () -> {
 		/**

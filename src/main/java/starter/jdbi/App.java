@@ -26,6 +26,7 @@ public class App extends Jooby {
 
   {
 
+    port(8787);
     use("*", new CorsHandler());
     use(new Jackson());
     use(new Jdbc());
@@ -44,6 +45,7 @@ public class App extends Jooby {
           .attach(UserMovRepo.class)
           .attach(LoginAdminRepo.class)
           .attach(GridMapRepo.class)
+          .attach(UserPositionRepo.class)
           
       )
     );
@@ -56,6 +58,7 @@ public class App extends Jooby {
     use(new UserMovApi());
     use(new LoginAdminApi());
     use(new GridMapApi());
+    use(new UserPositionApi());
 
     
     //~ Routes
@@ -76,6 +79,7 @@ public class App extends Jooby {
     assets("/RiskArea", "RiskArea.html");
     assets("/lock", "lock_screen.html");
     assets("/roatab", "roa_table.html");   
+    assets("/compare", "compare.html");  
     }
   
     {

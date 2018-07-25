@@ -16,12 +16,10 @@ import java.util.List;
 @RegisterRowMapper(GridMapObj.Mapper.class)
 public interface GridMapRepo {
   
-
- 
  @SqlQuery("SELECT id, ST_AsText(geom), gridsby.left, bottom, gridsby.right, top FROM gridsby")
-  List<GridMapObj> grid();
+ List<GridMapObj> grid();
 
-  
-  
+ @SqlQuery("SELECT id FROM gridsby WHERE ST_Contains(geom, ST_GeomFromText(:lokasi, 4326))")
+ int getGridId(String lokasi);
 }
 

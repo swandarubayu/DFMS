@@ -20,6 +20,7 @@ public class GridMapObj {
   private Double bottom;
   private Double right;
   private Double top;
+  private int userCount = 0;
 
   public GridMapObj(int id, String geom, Double left, Double bottom, Double right, Double top) {
     this.id = id;
@@ -53,6 +54,12 @@ public class GridMapObj {
 public Double getTop() {
     return top;
   }
-    
-  
+
+  public int getUserCount() {
+    return userCount;
+  }
+
+  public void setUserCount(int userCount) {
+    this.userCount = userCount;
+  }
 }

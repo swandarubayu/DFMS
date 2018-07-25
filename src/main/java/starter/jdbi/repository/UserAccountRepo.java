@@ -27,6 +27,10 @@ public interface UserAccountRepo {
   @SqlQuery("SELECT * FROM user_account  ORDER BY id DESC LIMIT 5")
   List<UserAccountObj> listForDashboard();
 
+  // *get all user
+  @SqlQuery("SELECT id, username, password, domisili FROM user_account ORDER BY id")
+  List<UserAccountObj> listAll();
+
   /**
    * User Account berdasarkan ID.
    */

@@ -40,7 +40,7 @@ public class LoginApi extends Jooby {
 			if(BCrypt.checkpw(password, realPassword)) {
 				UserAccountObj user = db.findByPassword(realPassword);
 
-				LoginCheck userCheck = new LoginCheck(user.getId(), user.getUsername());
+				LoginCheck userCheck = new LoginCheck(user.getId(), user.getUsername(), user.getDomisili());
 
 				//Session session = req.session();
 				
@@ -53,7 +53,7 @@ public class LoginApi extends Jooby {
 			}
 		}
 		
-		LoginCheck userCheck = new LoginCheck(0, "");
+		LoginCheck userCheck = new LoginCheck(0, "", "");
 		//req.flash("gagal", "true");
 
 		return userCheck;

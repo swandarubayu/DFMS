@@ -22,12 +22,7 @@
     <!-- Custom styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+   
   </head>
 
   <body>
@@ -201,7 +196,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
               
-                  <p class="centered"><a href="profile.html"><img src="assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
+                  <p class="centered"><a href="profile.html"><img src="assets/img/dss.jpg" class="img-circle" width="60"></a></p>
                   <h5 class="centered">ADMIN</h5>
                     
                   <li class="mt">
@@ -270,6 +265,7 @@
                               <thead>
                               <tr>
                                   <tr>
+                              <td><b>No</b></td>    
                               <td><b>Id</b></td>
                               <td><b>Username</b></td>
                               <td><b>Domisili</b></td>
@@ -320,43 +316,53 @@
 
                   data.forEach(function(User){
                     //console.log(ikan);
-                    
+
+                    let tdNomor = document.createElement("td")
                     let tdId = document.createElement("td");
                     let tdUsername = document.createElement("td");
                     let tdDomisili = document.createElement("td");
                     let btnEdit = document.createElement("button");
                     let btnHapus = document.createElement("button");
-                    // let linkHapus = document.createElement("a");
+                    let tdKelola = document.createElement("td");
 
-                    // console.log("ikan" +nomor);
-                    nomor++;
+                    let trUser = document.createElement("tr");
 
+                    let Nomor = document.createTextNode(nomor); 
+                    let Id = document.createTextNode(User.id);
+                    let Username = document.createTextNode(User.username);
+                    let Domisili = document.createTextNode(User.domisili);
+                    let Hapus = document.createTextNode("hapus");
+                    let Edit = document.createTextNode("edit");
+                    let spasi = document.createTextNode(" ");
+
+                    
+        
                     // namaParent.appendChild(namaChild)
-                    tdNomor.appendChild(nomorTeks);
-                    tdJenis.appendChild(jenisTeks);
-                    tdJmlIkanSehat.appendChild(jmlIkanSehatTeks);
-                    tdJmlIkanSakit.appendChild(jmlIkanSakitTeks);
-                    tdWkt.appendChild(wktTeks);
-                    tdTotal.appendChild(totalTeks);
-                    btnEdit.appendChild(editTeks);
-                    btnHapus.appendChild(hapusTeks);
+                    tdId.appendChild(Id);
+                    tdNomor.appendChild(Nomor);
+                    tdUsername.appendChild(Username);
+                    tdDomisili.appendChild(Domisili);
+                    btnEdit.appendChild(Edit);
+                    btnHapus.appendChild(Hapus);
                     tdKelola.appendChild(btnEdit);
                     tdKelola.appendChild(spasi);
                     tdKelola.appendChild(btnHapus);
 
-                    trIkan.appendChild(tdNomor);
-                    trIkan.appendChild(tdJenis);
-                    trIkan.appendChild(tdJmlIkanSehat);
-                    trIkan.appendChild(tdJmlIkanSakit);
-                    trIkan.appendChild(tdWkt);
-                    trIkan.appendChild(tdTotal);
-                    trIkan.appendChild(tdKelola);
-                    tabelBody.appendChild(trIkan);
+                    trUser.appendChild(tdNomor);
+                    trUser.appendChild(tdId);
+                    trUser.appendChild(tdUsername);
+                    trUser.appendChild(tdDomisili);
+                    trUser.appendChild(tdKelola);
+
+                    tabelBody.appendChild(trUser);
+
+                     nomor++;
+                   
                   });
                 }
               };
 
-              xmlhttp.open("GET", "/api/user-account", true);
+              xmlhttp.open("GET", "/api/UserList", true);
               xmlhttp.send();
             }
 
@@ -366,7 +372,6 @@
     <!-- js placed at the end of the document so the pages load faster -->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/DataTables/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="assets/js/jquery.scrollTo.min.js"></script>
     <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
@@ -374,14 +379,14 @@
 
     <!--script for this page-->
     
-  <script>
+  <!-- <script>
       //custom select box
 
       $(document).ready( function () {
           $('#usertab').DataTable();
       } );
 
-  </script>
+  </script> -->
 
   </body>
 </html>

@@ -25,8 +25,15 @@ public class GridMapApi extends Jooby {
 
   		get(req -> {
   			GridMapRepo db = require(GridMapRepo.class);
+        UserPositionRepo upr = require(UserPositionRepo.class);
 
   			List<GridMapObj> gridMap = db.grid();
+
+        for(int i=0; i<gridMap.size(); i++) {
+          gridMap.get(i).setUserCount(
+            upr.countUserByIdGrid(gridMap.get(i).getId())
+          );
+        }
 
   			if(gridMap == null) {
   				throw new Err(Status.NOT_FOUND);

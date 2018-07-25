@@ -10,17 +10,19 @@ public class LoginCheck {
 
   public static class Mapper implements RowMapper<LoginCheck> {
     @Override public LoginCheck map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new LoginCheck(rs.getInt("id"), rs.getString("username"));
+      return new LoginCheck(rs.getInt("id"), rs.getString("username"), rs.getString("domisili"));
     }
   }
 
   private int id;
   private String username;
   private boolean error;
+  private String domisili;
 
-  public LoginCheck(int id, String username) {
+  public LoginCheck(int id, String username, String domisili) {
     this.id = id;
     this.username = username;
+    this.domisili = domisili;
     this.error = true;
   }
   
@@ -30,6 +32,10 @@ public class LoginCheck {
   
   public String getUsername() {
 	  return username;
+  }
+
+  public String getDomisili() {
+    return domisili;
   }
 
   public boolean getError(){
