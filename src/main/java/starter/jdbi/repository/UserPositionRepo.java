@@ -29,7 +29,7 @@ public interface UserPositionRepo {
 	@SqlQuery("SELECT COUNT(*) FROM user_position WHERE id_user=:id")
 	int isExist(int id);
 
-	@SqlUpdate("UPDATE user_position SET id_user=:idUser, id_grid=:idGrid WHERE idUser=:idUser")
+	@SqlUpdate("UPDATE user_position SET id_user=:idUser, id_grid=:idGrid WHERE id_user=:idUser")
 	@GetGeneratedKeys
 	int update(@BindBean UserPositionObj UserPositionObj);
   
