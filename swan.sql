@@ -307,6 +307,39 @@ ALTER SEQUENCE history_gid_seq OWNED BY history.gid;
 
 
 --
+-- Name: status; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE status (
+    id integer NOT NULL,
+    jenis character varying(15)
+);
+
+
+ALTER TABLE status OWNER TO postgres;
+
+--
+-- Name: status_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE status_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE status_id_seq OWNER TO postgres;
+
+--
+-- Name: status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE status_id_seq OWNED BY status.id;
+
+
+--
 -- Name: user_account; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -314,7 +347,9 @@ CREATE TABLE user_account (
     id integer NOT NULL,
     username character varying(30) NOT NULL,
     password character varying(64) NOT NULL,
-    domisili character varying(100)
+    domisili character varying(100),
+    nama character varying(100),
+    inrisk real
 );
 
 
@@ -443,6 +478,13 @@ ALTER TABLE ONLY gridsby ALTER COLUMN id SET DEFAULT nextval('gridsby_id_seq'::r
 --
 
 ALTER TABLE ONLY history ALTER COLUMN gid SET DEFAULT nextval('history_gid_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY status ALTER COLUMN id SET DEFAULT nextval('status_id_seq'::regclass);
 
 
 --
@@ -995,25 +1037,29 @@ COPY spatial_ref_sys  FROM stdin;
 
 
 --
+-- Data for Name: status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY status (id, jenis) FROM stdin;
+1	Vector
+2	Infected
+\.
+
+
+--
+-- Name: status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('status_id_seq', 1, false);
+
+
+--
 -- Data for Name: user_account; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY user_account (id, username, password, domisili) FROM stdin;
-1	kasrun	$2a$10$Z6B7KpSaHBdbmj942cnxveIHDCsjgKDYTqLIpVxwix/uYHHTez0uK	tmb
-2	usertest	$2a$10$DJjVhvWNGZFsNtZ7.9gHVuGL/Mntwh8Vl4jeflzUDZOTZnvL/AJx.	surabaya
-3	troll	$2a$10$1u7EQujTD4Cy3pRyrP.Ree9vI44MwJmBwumjrQClk4oS0RWnHUtQe	surabaya
-4	swan	$2a$10$.p/cMktVbVfctRXcfQ8BXeaPdXL4i7.NUBfotrnOk5bnf89J9ICM.	surabaya
-5	gayatri	$2a$10$1WsDe2O5p28qXBYvQNbjfuP6qyXASkKymP.g2nDwUxeYeSzuH6ErW	kejawan gebang
-6	putri	$2a$10$MPDlVr/Lgg7x3ZVu1fO21udaLWK56LTvqDbLiPpBF2lC.8CmPIMri	tegalsari
-7	jihan 	$2a$10$5IO/gOCfcHHE1DChqRaL5.ebtEah2XtTWhnEPpgmYbYovvAHO0ayW	kalisari
-8	kinal	$2a$10$sAj1ch1UCwUeUwsrZX/hmunwoCusVvlWLF53hNCIsB70oA71JJKpG	simokerto
-9	muzlim88	$2a$10$Qg06tgJ9scCjwZJm71xuPOkt5wzeSPppDI8RxM/KYMwcO/O2yEUGC	kejawan gebang
-10	kopral87	$2a$10$3o9ot6/svTHNF41hUfMTf.y6Y0QEaScRV8aUy.r5bLKF81yNQ3hSO	keputih
-11	karina	$2a$10$x.3T4ptW95S45bPAWiveSe0yAzMW2WXKGAEQ6KWRiv7fWuup49gji	hollow
-12	sinta	$2a$10$BYqf9lKQb29t35Y5XrlOcuuIDq/9xJ.n08D/rR82dGkM7pyd5bqRO	tegal mulyoreji
-13	gofur	$2a$10$qI9AxcAy7v5TzdDGwkRxSOYseIS5fFr5r7v4MRUoDQsX.IYjg1azG	tegal mulyoreji
-14	ghazali	$2a$10$NAF/H6WxNQ8huhuQZP/CT.9YcIlarGv6KnDNdtNIgF18B0aUv20km	sukolilo
-15	siska	$2a$10$8Xoo5cfEUp1LOkelpkwaJuwrnz/gEI0tANQ2kZUJoRff0enrwFV2i	siwalankerto
+COPY user_account (id, username, password, domisili, nama, inrisk) FROM stdin;
+18	swandaru	$2a$10$1jyQdftd93uDfc/9e8lzRuqcAeeB7zIsRivKtWbJXt/TFKckgX.Z2	surabaya	swandarubayu	\N
+19	usertest	$2a$10$gbvfA2CMRwIBZB3xo0rkguA23zRGQR3JHp//sDS83z19RFFSDHT0e	surabaya	user	\N
 \.
 
 
@@ -1021,7 +1067,7 @@ COPY user_account (id, username, password, domisili) FROM stdin;
 -- Name: user_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('user_account_id_seq', 15, true);
+SELECT pg_catalog.setval('user_account_id_seq', 19, true);
 
 
 --
@@ -1029,15 +1075,33 @@ SELECT pg_catalog.setval('user_account_id_seq', 15, true);
 --
 
 COPY user_mov (id, user_id, location, updatedat) FROM stdin;
-35	2	0101000020E6100000B3EDB43522305C40F88A6EBDA6071DC0	2018-09-22 16:47:00.08
-36	4	0101000020E61000006A9D5D63BC325C40CF66D5E76A1B1DC0	0118-06-17 14:32:00.39
-38	4	0101000020E6100000E051BEFBBE325C4008C90226701B1DC0	0118-06-18 15:31:00.18
-37	4	0101000020E6100000E051BEFBBE325C4008C90226701B1DC0	0118-06-18 15:31:00.18
-39	2	0101000020E6100000FBCBEEC9C3325C40CFF753E3A51B1DC0	0118-06-18 17:18:00.37
-42	4	0101000020E6100000884CF91054305C40DE8FDB2F9F2C1DC0	0118-06-18 17:18:00
-43	6	0101000020E6100000884CF91054305C40DE8FDB2F9F2C1DC0	0118-06-18 17:18:00
-44	2	0101000020E6100000884CF91054305C40DE8FDB2F9F2C1DC0	0118-06-18 17:18:00
-46	3	0101000020E6100000A40BFB873E335C401B5B199EA8261DC0	0118-06-25 02:58:00.3
+239	19	0101000020E6100000A2E1A7843A335C40EB4E8A69B9261DC0	0118-07-01 01:28:00.47
+240	19	0101000020E6100000A2E1A7843A335C40EB4E8A69B9261DC0	0118-07-01 01:29:00.17
+241	19	0101000020E6100000A2E1A7843A335C40EB4E8A69B9261DC0	0118-07-01 03:04:00.3
+242	19	0101000020E6100000A2E1A7843A335C40EB4E8A69B9261DC0	0118-07-01 03:09:00.31
+243	19	0101000020E610000015671F3EC3325C404082E2C7981B1DC0	0118-07-01 10:28:00.45
+244	19	0101000020E610000029544AE2BF325C40370D6450801B1DC0	0118-07-01 10:29:00.33
+245	19	0101000020E61000002F8B89CDC7325C4024E99AC9371B1DC0	0118-07-01 12:47:00.1
+246	19	0101000020E61000002F8B89CDC7325C4024E99AC9371B1DC0	0118-07-01 12:47:00.31
+247	19	0101000020E6100000B314B68CC1325C40953E74417D1B1DC0	0118-07-01 20:35:00.17
+248	19	0101000020E6100000B31F2922C3325C40B3EF8AE07F1B1DC0	0118-07-01 22:44:00.3
+249	19	0101000020E6100000151DC9E53F335C4082E2C798BB261DC0	0118-07-02 01:56:00.38
+250	19	0101000020E6100000DC43D5C23F335C40FEC4EE28BB261DC0	0118-07-02 02:18:00
+251	19	0101000020E6100000AF32408F3E335C40539E666EAB261DC0	0118-07-02 02:23:00.34
+252	19	0101000020E6100000092AF40B40335C4072CA373696231DC0	0118-07-02 02:23:00.42
+253	19	0101000020E610000071CC9F5C40335C401A1F53649A261DC0	0118-07-02 02:28:00.23
+254	19	0101000020E61000006B9C601241335C4053649AD693261DC0	0118-07-02 02:50:00.14
+258	19	0101000020E6100000946DE00E54335C40AFB0E07EC0231DC0	0118-07-02 03:09:00.47
+257	19	0101000020E6100000946DE00E54335C40AFB0E07EC0231DC0	0118-07-02 03:10:00.13
+256	19	0101000020E6100000946DE00E54335C40AFB0E07EC0231DC0	0118-07-02 03:10:00.11
+255	19	0101000020E6100000946DE00E54335C40AFB0E07EC0231DC0	0118-07-02 03:09:00.57
+259	19	0101000020E6100000D186E96842335C408251499D80261DC0	0118-07-02 03:25:00.38
+260	19	0101000020E6100000D186E96842335C408251499D80261DC0	0118-07-02 03:26:00.1
+261	19	0101000020E6100000D186E96842335C408251499D80261DC0	0118-07-02 03:26:00.23
+262	19	0101000020E610000031C36CEF40335C4011E4A08499261DC0	0118-07-02 20:41:00.43
+263	19	0101000020E610000060D874173B335C40F3A62215C6261DC0	0118-07-02 20:43:00.42
+264	19	0101000020E610000060D874173B335C40F3A62215C6261DC0	0118-07-02 20:43:00.42
+265	19	0101000020E6100000408F3ED338335C4006743938EB261DC0	0118-07-02 20:43:00.57
 \.
 
 
@@ -1045,7 +1109,7 @@ COPY user_mov (id, user_id, location, updatedat) FROM stdin;
 -- Name: user_mov_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('user_mov_id_seq', 53, true);
+SELECT pg_catalog.setval('user_mov_id_seq', 265, true);
 
 
 --
@@ -1053,10 +1117,7 @@ SELECT pg_catalog.setval('user_mov_id_seq', 53, true);
 --
 
 COPY user_position (id, id_user, id_grid) FROM stdin;
-2	5	1
-1	6	279
-3	2	279
-4	3	365
+7	19	365
 \.
 
 
@@ -1064,7 +1125,7 @@ COPY user_position (id, id_user, id_grid) FROM stdin;
 -- Name: user_position_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('user_position_id_seq', 4, true);
+SELECT pg_catalog.setval('user_position_id_seq', 7, true);
 
 
 --
@@ -1150,6 +1211,14 @@ ALTER TABLE ONLY gridsby
 
 ALTER TABLE ONLY history
     ADD CONSTRAINT history_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY status
+    ADD CONSTRAINT status_pkey PRIMARY KEY (id);
 
 
 --

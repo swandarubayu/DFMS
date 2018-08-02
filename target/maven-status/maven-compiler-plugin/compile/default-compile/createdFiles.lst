@@ -1,8 +1,8 @@
-starter\jdbi\api\LoginApi.class
 starter\jdbi\api\UserAccountApi.class
-starter\jdbi\api\UserPositionApi.class
-starter\jdbi\repository\UserPositionRepo.class
 starter\jdbi\api\RegisterApi.class
-starter\jdbi\object\UserPositionObj.class
-starter\jdbi\repository\LoginAdminRepo.class
 starter\jdbi\object\UserPositionObj$Mapper.class
+starter\jdbi\api\LoginApi.class
+starter\jdbi\repository\UserPositionRepo.class
+starter\jdbi\repository\LoginAdminRepo.class
+starter\jdbi\api\UserPositionApi.class
+starter\jdbi\object\UserPositionObj.class

@@ -10,7 +10,7 @@ public class LoginCheck {
 
   public static class Mapper implements RowMapper<LoginCheck> {
     @Override public LoginCheck map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new LoginCheck(rs.getInt("id"), rs.getString("username"), rs.getString("domisili"));
+      return new LoginCheck(rs.getInt("id"), rs.getString("username"), rs.getString("domisili"), rs.getString("nama"));
     }
   }
 
@@ -18,12 +18,14 @@ public class LoginCheck {
   private String username;
   private boolean error;
   private String domisili;
+  private String nama;
 
-  public LoginCheck(int id, String username, String domisili) {
+  public LoginCheck(int id, String username, String domisili, String nama) {
     this.id = id;
     this.username = username;
     this.domisili = domisili;
     this.error = true;
+    this.nama = nama;
   }
   
   public int getId() {
@@ -40,6 +42,11 @@ public class LoginCheck {
 
   public boolean getError(){
     return error;
+
+  }
+
+  public String getNama(){
+    return nama;
 
   }
 

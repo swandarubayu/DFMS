@@ -28,7 +28,7 @@ public interface UserAccountRepo {
   List<UserAccountObj> listForDashboard();
 
   // *get all user
-  @SqlQuery("SELECT id, username, password, domisili FROM user_account ORDER BY id")
+  @SqlQuery("SELECT id, username, nama, password, domisili, inrisk FROM user_account ORDER BY id")
   List<UserAccountObj> listAll();
 
   /**
@@ -70,14 +70,14 @@ public interface UserAccountRepo {
   /**
    * Menambahkan User Account dan me-return keberhasilannya.
    */
-  @SqlUpdate("INSERT INTO user_account(username, password, domisili) values(:username, :password, :domisili)")
+  @SqlUpdate("INSERT INTO user_account(username, nama, password, domisili, inrisk) values(:username, :nama, :password, :domisili, :inrisk)")
   @GetGeneratedKeys
   int insert(@BindBean UserAccountObj UserAccountObj);
 
   /**
    * Meng-update User Account berdasarkan ID-nya dan me-return keberhasilannya.
    */
-  @SqlUpdate("UPDATE user_account SET username=:username, password=:password, domisili=:domisili, WHERE id=:id")
+  @SqlUpdate("UPDATE user_account SET username=:username, nama=:nama, password=:password, domisili=:domisili, inrisk=:inrisk, WHERE id=:id")
   boolean update(@BindBean UserAccountObj UserAccountObj);
 
   /**

@@ -68,18 +68,30 @@ public class App extends Jooby {
     use(new SudoC());
 
     //~ Asset script
-    assets("/assets/**");
+    // assets("/**");
+    assets("/dist/**");
+    assets("/bower_components/**");
+    assets("/plugins/**");
+
     
     assets("/coba_input", "coba_input.html");
     assets("/index", "index.html");
-    assets("/login", "login.html");
-    assets("/usertab", "user_table.html");
-    assets("/UserMov", "UserMovMaps.html");
-    assets("/blank", "blank.html");
-    assets("/RiskArea", "RiskArea.html");
-    assets("/lock", "lock_screen.html");
-    assets("/roatab", "roa_table.html");   
-    assets("/compare", "compare.html");  
+    assets("/usertab", "/pages/tables/userdata.html");
+    assets("/roatab", "/pages/tables/roa.html");
+    assets("/roamaps", "/pages/mapsutil/RoaMaps.html");
+    assets("/usermaps", "/pages/mapsutil/UserMaps.html");
+    assets("/login", "/pages/examples/login.html");    
+
+
+
+    // assets("/login", "login.html");
+    // assets("/usertab", "user_table.html");
+    // assets("/UserMov", "UserMovMaps.html");
+    // assets("/blank", "blank.html");
+    // assets("/RiskArea", "RiskArea.html");
+    // assets("/lock", "lock_screen.html");
+    // assets("/roatab", "roa_table.html");   
+    // assets("/compare", "compare.html");  
     }
   
     {
