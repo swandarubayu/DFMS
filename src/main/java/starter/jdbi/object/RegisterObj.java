@@ -10,17 +10,19 @@ public class RegisterObj {
 
   public static class Mapper implements RowMapper<RegisterObj> {
     @Override public RegisterObj map(final ResultSet rs, final StatementContext ctx) throws SQLException {
-      return new RegisterObj(rs.getString("username"), rs.getString("password"), rs.getString("domisili"));
+      return new RegisterObj(rs.getString("username"), rs.getString("nama"), rs.getString("password"), rs.getString("domisili"));
     }
   }
 
   private String username;
+  private String nama;
   private String password;
   private String domisili;
   
 
-  public RegisterObj(String username, String password, String domisili) {
+  public RegisterObj(String username, String nama, String password, String domisili) {
     this.username = username;
+    this.nama = nama;
     this.password = password;
     this.domisili = domisili;
     
@@ -28,6 +30,10 @@ public class RegisterObj {
   
   public String getUsername() {
 	  return username;
+  }
+
+  public String getNama() {
+    return nama;
   }
   
   public String getPassword() {
